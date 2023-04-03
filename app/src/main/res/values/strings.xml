@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Currency Converter</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+   <!--Converter screen-->
+    <string name="change_currency">button to change currency</string>
+    <string name="money_input">Input</string>
+    <string name="convert_result">Result</string>
+
 </resources>
