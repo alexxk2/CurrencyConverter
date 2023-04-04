@@ -2,8 +2,16 @@
 <resources>
 
     <!--Converter screen-->
-    <dimen name="convert_button_margin_top">220dp</dimen>
-    <dimen name="edit_text_margin_top">210dp</dimen>
+    <dimen name="horizontal_margin">18dp</dimen>
+    <dimen name="input_corner_radius">10dp</dimen>
+    <dimen name="margin_input_and_flags">40dp</dimen>
+    <dimen name="linear_layout_height">100dp</dimen>
+    <dimen name="flag_long_side">135dp</dimen>
+    <dimen name="flag_short_side">90dp</dimen>
+    <dimen name="flag_corner_radius">16dp</dimen>
+    <dimen name="navigation_buttons_margin">24dp</dimen>
+
+    <!--Settings screen-->
 
 
 </resources>

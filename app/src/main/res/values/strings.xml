@@ -6,5 +6,13 @@
     <string name="change_currency">button to change currency</string>
     <string name="money_input">Input</string>
     <string name="convert_result">Result</string>
+    <string name="currency_image">currency image</string>
+
+    <!--Settings screen-->
+    <string name="back_button">back button</string>
+    <string name="settings">Settings</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="language">Language</string>
+
 
 </resources>

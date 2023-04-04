@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.viewmodels.ConverterViewModel
 
@@ -37,8 +39,17 @@ class ConverterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.settingsButton.setOnClickListener {
+            val action = ConverterFragmentDirections.actionConverterFragmentToSettingsFragment()
+            navigate(action)
+        }
 
     }
+
+    private fun navigate(action: NavDirections){
+        binding.root.findNavController().navigate(action)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
