@@ -10,13 +10,24 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.example.currencyconverter.databinding.FragmentConverterBinding
+import com.example.currencyconverter.sources.ConverterApi
+import com.example.currencyconverter.sources.SymbolsResponse
 import com.example.currencyconverter.viewmodels.ConverterViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 class ConverterFragment : Fragment() {
     private var _binding: FragmentConverterBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ConverterViewModel by viewModels()
+
+
+
+
 
      override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +55,33 @@ class ConverterFragment : Fragment() {
             navigate(action)
         }
 
+        val retrofit = Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val converterApiService = retrofit.create(ConverterApi::class.java)
+
+        converterApiService.getLatest2().enqueue(object: Callback<SymbolsResponse>{
+            override fun onResponse(
+                call: Call<SymbolsResponse>,
+                response: Response<SymbolsResponse>
+            ) {
+                if (response.code()==200) {
+                    val result = "${response.body()?.quotas}"
+                    binding.testTextView.text = result
+                }
+                else binding.testTextView.text = response.code().toString()
+            }
+
+            override fun onFailure(call: Call<SymbolsResponse>, t: Throwable) {
+                binding.testTextView.text = t.toString()
+            }
+
+
+        })
+
+
     }
 
     private fun navigate(action: NavDirections){
@@ -54,5 +92,10 @@ class ConverterFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object{
+        const val BASE_URL = "https://api.currencyapi.com"
+        const val API_KEY = "m8t10hvSal3gRP9IIlLERGTxd8CgbqcUHkoKKi1Q"
     }
 }
