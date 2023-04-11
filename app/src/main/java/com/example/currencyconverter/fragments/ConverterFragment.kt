@@ -62,14 +62,16 @@ class ConverterFragment : Fragment() {
 
         val converterApiService = retrofit.create(ConverterApi::class.java)
 
-        converterApiService.getLatest2().enqueue(object: Callback<SymbolsResponse>{
+        converterApiService.getLatest(baseCurrency = "USD", currencies = "RUB").enqueue(object: Callback<SymbolsResponse>{
             override fun onResponse(
                 call: Call<SymbolsResponse>,
                 response: Response<SymbolsResponse>
             ) {
                 if (response.code()==200) {
-                    val result = "${response.body()?.quotas}"
-                    binding.testTextView.text = result
+                    val result1 = "${response.body()?.data?.RUB?.code}"
+                    val result2 = "${response.body()?.data?.RUB?.value}"
+                    val output = "code of currency:$result1\nrate: $result2"
+                    binding.testTextView.text = output
                 }
                 else binding.testTextView.text = response.code().toString()
             }
