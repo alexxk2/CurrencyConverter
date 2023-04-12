@@ -2,7 +2,7 @@
     <string name="app_name">Currency Converter</string>
 
 
-   <!--Converter screen-->
+    <!--Converter screen-->
     <string name="change_currency">button to change currency</string>
     <string name="money_input">Input</string>
     <string name="convert_result">Result</string>
@@ -14,5 +14,10 @@
     <string name="dark_theme">Dark theme</string>
     <string name="language">Language</string>
 
+    <!--Search screen-->
+    <string name="clear_button">clear button</string>
+
+    <!--Recycler view item-->
+    <string name="default_text_recycler_view">Australian Dollar • AUD</string>
 
 </resources>
