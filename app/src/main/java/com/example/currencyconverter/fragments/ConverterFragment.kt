@@ -11,11 +11,7 @@ import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.sources.ConverterApi
-import com.example.currencyconverter.sources.SymbolsResponse
 import com.example.currencyconverter.viewmodels.ConverterViewModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -62,7 +58,7 @@ class ConverterFragment : Fragment() {
 
         val converterApiService = retrofit.create(ConverterApi::class.java)
 
-        converterApiService.getLatest(baseCurrency = "USD", currencies = "RUB").enqueue(object: Callback<SymbolsResponse>{
+        /*converterApiService.getLatest(baseCurrency = "USD", currencies = "RUB").enqueue(object: Callback<SymbolsResponse>{
             override fun onResponse(
                 call: Call<SymbolsResponse>,
                 response: Response<SymbolsResponse>
@@ -79,10 +75,12 @@ class ConverterFragment : Fragment() {
             override fun onFailure(call: Call<SymbolsResponse>, t: Throwable) {
                 binding.testTextView.text = t.toString()
             }
+        })*/
 
-
-        })
-
+        binding.startCurrency.setOnClickListener {
+            val action = ConverterFragmentDirections.actionConverterFragmentToSearchFragment()
+            navigate(action)
+        }
 
     }
 

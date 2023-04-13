@@ -2,12 +2,18 @@ package com.example.currencyconverter.fragments
 
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.currencyconverter.adapters.CurrencyAdapter
 import com.example.currencyconverter.databinding.FragmentSearchBinding
+import com.example.currencyconverter.models.SearchService
 import com.example.currencyconverter.viewmodels.SearchViewModel
 
 class SearchFragment : Fragment() {
@@ -15,6 +21,8 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SearchViewModel by viewModels()
+    private val searchService = SearchService()
+    private lateinit var adapter: CurrencyAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +37,7 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSearchBinding.inflate(layoutInflater,container,false)
+        _binding = FragmentSearchBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -37,6 +45,46 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        setRecyclerView()
+
+
+
+        binding.searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val filteredList = searchService.searchFilter(s.toString())
+                adapter.updateDataSet(filteredList)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                changeClearButtonVisibility(s)
+            }
+        })
+
+        binding.backButton.setOnClickListener { findNavController().navigateUp() }
+        binding.buttonClear.setOnClickListener { clearSearchInput() }
+
+
+    }
+
+    private fun clearSearchInput() {
+        binding.searchEditText.setText("")
+    }
+
+    private fun changeClearButtonVisibility(input: Editable?) {
+        binding.buttonClear.visibility = if (input.isNullOrEmpty()) View.GONE
+        else View.VISIBLE
+    }
+
+
+    private fun setRecyclerView() {
+        adapter = CurrencyAdapter(searchService.listOfCurrencies, requireContext())
+        binding.recyclerView.adapter = adapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.setHasFixedSize(true)
     }
 
     override fun onDestroyView() {

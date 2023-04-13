@@ -8,32 +8,32 @@ data class SymbolsResponse(
 )
 
 data class CurrencyNames(
-    val RUB: Currency,
-    val USD: Currency,
-    val EUR: Currency,
-    val AUD: Currency,//Australian Dollar
-    val BRL: Currency,//Brazilian Real
-    val BYR: Currency,//Belarusian Ruble
-    val CAD: Currency,//Canadian Dollar
-    val CNY: Currency,//Chinese Yuan
-    val CZK: Currency,//Czech Republic Koruna
-    val EGP: Currency,//Egyptian Pound
-    val GBP: Currency,//British Pound Sterling
-    val GEL: Currency,//Georgian Lari
-    val ILS: Currency,//Israeli New Sheqel
-    val INR: Currency,//Indian Rupee
-    val JPY: Currency,//Japanese Yen
-    val KRW: Currency,//South Korean Won
-    val KZT: Currency,//Kazakhstani Tenge
-    val MXN: Currency,//Mexican Peso
-    val SAR: Currency,//Saudi Riyal
-    val THB: Currency,//Thai Baht
-    val UZS: Currency,//Uzbekistan Som
-    val BTC: Currency,//Bitcoin
-
+    val RUB: CurrencyRate,//Russian Ruble
+    val USD: CurrencyRate,//US Dollar
+    val EUR: CurrencyRate,//Euro
+    val AUD: CurrencyRate,//Australian Dollar
+    val BRL: CurrencyRate,//Brazilian Real
+    val BYN: CurrencyRate,//Belarusian Ruble
+    val CAD: CurrencyRate,//Canadian Dollar
+    val CNY: CurrencyRate,//Chinese Yuan
+    val EGP: CurrencyRate,//Egyptian Pound
+    val GBP: CurrencyRate,//British Pound Sterling
+    val GEL: CurrencyRate,//Georgian Lari
+    val ILS: CurrencyRate,//Israeli New Sheqel
+    val INR: CurrencyRate,//Indian Rupee
+    val JPY: CurrencyRate,//Japanese Yen
+    val KRW: CurrencyRate,//South Korean Won
+    val KZT: CurrencyRate,//Kazakhstani Tenge
+    val MXN: CurrencyRate,//Mexican Peso
+    val SAR: CurrencyRate,//Saudi Riyal
+    val THB: CurrencyRate,//Thai Baht
+    val UZS: CurrencyRate,//Uzbekistan Som
+    val BTC: CurrencyRate//Bitcoin
 )
 
-data class Currency(
+data class CurrencyRate(
     val code: String,
-    val value: Float
+    val value: Float,
+    val name: String,
+    val flag: String
 )

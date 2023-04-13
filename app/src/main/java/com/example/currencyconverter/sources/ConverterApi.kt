@@ -18,10 +18,15 @@ interface ConverterApi {
         @Query("currencies") currencies: String
     ):Call<SymbolsResponse>
 
+    @GET("/v3/currencies")
+    fun getCurrencies(
+        @Query("apikey") apiKey: String = API_KEY
+    ):Call<SymbolsResponse>
+
+
     companion object{
         const val API_KEY = "m8t10hvSal3gRP9IIlLERGTxd8CgbqcUHkoKKi1Q"
     }
 }
 
 
-//&base=USD&symbols=GBP,JPY,EUR
