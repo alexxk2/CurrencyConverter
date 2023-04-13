@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Converter screen-->
+    <dimen name="horizontal_margin">18dp</dimen>
+    <dimen name="input_corner_radius_medium">10dp</dimen>
+    <dimen name="margin_input_and_flags">40dp</dimen>
+    <dimen name="linear_layout_height">100dp</dimen>
+    <dimen name="flag_long_side">135dp</dimen>
+    <dimen name="flag_short_side">90dp</dimen>
+    <dimen name="flag_corner_radius">16dp</dimen>
+    <dimen name="navigation_buttons_margin">24dp</dimen>
+
+    <!--Settings screen-->
+
+    <!--Search screen-->
+    <dimen name="input_corner_radius_large">24dp</dimen>
+    <dimen name="clear_button_margin_end">12dp</dimen>
+    <dimen name="clear_button_margin_top">5dp</dimen>
+
+
+</resources>
