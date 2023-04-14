@@ -88,7 +88,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/start_currency"
+            android:id="@+id/left_currency"
             android:layout_width="@dimen/flag_long_side"
             android:layout_height="@dimen/flag_short_side"
             android:elevation="0dp"
@@ -97,15 +97,17 @@
             app:cardCornerRadius="@dimen/flag_corner_radius">
 
             <ImageView
+                android:id="@+id/left_currency_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/red"
+                android:scaleType="centerCrop"
                 android:contentDescription="@string/currency_image" />
 
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/end_currency"
+            android:id="@+id/right_currency"
             android:layout_width="@dimen/flag_long_side"
             android:layout_height="@dimen/flag_short_side"
             android:clickable="true"
@@ -114,9 +116,11 @@
             app:cardCornerRadius="@dimen/flag_corner_radius">
 
             <ImageView
+                android:id="@+id/right_currency_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/blue"
+                android:scaleType="centerCrop"
                 android:contentDescription="@string/currency_image" />
         </com.google.android.material.card.MaterialCardView>
 
