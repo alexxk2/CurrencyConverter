@@ -8,13 +8,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.currencyconverter.databinding.FragmentConverterBinding
+import com.example.currencyconverter.models.CurrencyInfo
 import com.example.currencyconverter.sources.ConverterApi
 import com.example.currencyconverter.viewmodels.ConverterViewModel
+import com.google.gson.Gson
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+const val SHARED_PREFS = "shared_prefs"
 
 class ConverterFragment : Fragment() {
     private var _binding: FragmentConverterBinding? = null
@@ -22,15 +25,16 @@ class ConverterFragment : Fragment() {
     private val viewModel: ConverterViewModel by viewModels()
 
 
+    //transfer later to viewModel
+    private lateinit var leftCurrency : CurrencyInfo
+    private lateinit var rightCurrency : CurrencyInfo
 
 
-
-     override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-         arguments?.let {
-
-         }
+        arguments?.let {
+        }
     }
 
     override fun onCreateView(
@@ -39,17 +43,17 @@ class ConverterFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentConverterBinding.inflate(layoutInflater,container,false)
+        _binding = FragmentConverterBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.settingsButton.setOnClickListener {
-            val action = ConverterFragmentDirections.actionConverterFragmentToSettingsFragment()
-            navigate(action)
-        }
+        getCurrencyDataFromSharedPrefs()
+
+        binding.leftCurrencyImage.setImageResource(leftCurrency.flag)
+        binding.rightCurrencyImage.setImageResource(rightCurrency.flag)
 
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -77,25 +81,52 @@ class ConverterFragment : Fragment() {
             }
         })*/
 
-        binding.startCurrency.setOnClickListener {
-            val action = ConverterFragmentDirections.actionConverterFragmentToSearchFragment()
+        binding.settingsButton.setOnClickListener {
+            val action = ConverterFragmentDirections.actionConverterFragmentToSettingsFragment()
+            navigate(action)
+        }
+
+        binding.leftCurrency.setOnClickListener {
+
+            val action =
+                ConverterFragmentDirections.actionConverterFragmentToSearchFragment(true)
+            navigate(action)
+        }
+
+        binding.rightCurrency.setOnClickListener {
+
+            val action =
+                ConverterFragmentDirections.actionConverterFragmentToSearchFragment(false)
             navigate(action)
         }
 
     }
 
-    private fun navigate(action: NavDirections){
-        binding.root.findNavController().navigate(action)
+    private fun navigate(action: NavDirections) {
+        findNavController().navigate(action)
     }
 
+    private fun getCurrencyDataFromSharedPrefs(){
+        leftCurrency = sharedPrefsRequest(CurrencyInfo.DEFAULT_LEFT, LEFT_CURRENCY)
+        rightCurrency = sharedPrefsRequest(CurrencyInfo.DEFAULT_RIGHT, RIGHT_CURRENCY)
+    }
+
+    private fun sharedPrefsRequest(defaultValue: CurrencyInfo, sharedPrefsName: String): CurrencyInfo {
+        val sharedPrefs = activity?.getSharedPreferences(SHARED_PREFS,0)
+        val defaultJsonLeft = Gson().toJson(defaultValue)
+        val leftJsonCurrency = sharedPrefs?.getString(sharedPrefsName,defaultJsonLeft)
+        return Gson().fromJson(leftJsonCurrency, CurrencyInfo::class.java)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    companion object{
+    companion object {
         const val BASE_URL = "https://api.currencyapi.com"
         const val API_KEY = "m8t10hvSal3gRP9IIlLERGTxd8CgbqcUHkoKKi1Q"
+        const val LEFT_CURRENCY = "left_currency"
+        const val RIGHT_CURRENCY = "right_currency"
     }
 }

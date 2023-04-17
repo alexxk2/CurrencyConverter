@@ -2,18 +2,24 @@ package com.example.currencyconverter.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.CurrencyItemBinding
+import com.example.currencyconverter.fragments.ConverterFragmentDirections
+import com.example.currencyconverter.fragments.SearchFragment
+import com.example.currencyconverter.fragments.SearchFragmentDirections
 import com.example.currencyconverter.models.CurrencyInfo
 
 
 class CurrencyAdapter(
     private var dataSet: MutableList<CurrencyInfo>,
-    private val context: Context
-) : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
+    private val context: Context,
+    private val actionListener: CurrencyActionListener
+
+) : RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>(), View.OnClickListener {
 
     fun updateDataSet(newList: MutableList<CurrencyInfo>) {
         val diffCallback = CurrencyDiffCallback(dataSet,newList)
@@ -28,6 +34,10 @@ class CurrencyAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = CurrencyItemBinding.inflate(inflater, parent, false)
+
+        binding.constraintView.setOnClickListener(this)
+        binding.root.setOnClickListener(this)
+
         return CurrencyViewHolder(binding)
     }
 
@@ -43,8 +53,23 @@ class CurrencyAdapter(
 
             currencyFlagImage.setImageResource(item.flag)
             currencyInfo.text = currencyTextInfo
+            constraintView.tag = item
+            root.tag = item
         }
 
-
     }
+
+    override fun onClick(v: View?) {
+        val currencyInfo = v?.tag as CurrencyInfo
+        when(v.id){
+            R.id.constraint_view-> actionListener.onClickCurrency(currencyInfo)
+            else -> actionListener.onClickCurrency(currencyInfo)
+        }
+    }
+
+    interface CurrencyActionListener {
+        fun onClickCurrency(currencyInfo: CurrencyInfo)
+    }
+
+
 }
