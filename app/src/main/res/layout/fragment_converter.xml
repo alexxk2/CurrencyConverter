@@ -41,8 +41,10 @@
             android:id="@+id/start_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:digits="0123456789"
-            android:inputType="numberDecimal" />
+            android:digits="1234567890."
+            android:maxLength="14"
+            android:inputType="numberDecimal"
+             />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -71,7 +73,6 @@
             android:id="@+id/end_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:digits="0123456789"
             android:inputType="numberDecimal" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -168,6 +169,8 @@
         android:id="@+id/test_text_view"
         android:layout_width="match_parent"
         android:layout_height="300dp"
+        android:textSize="40sp"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         />
 

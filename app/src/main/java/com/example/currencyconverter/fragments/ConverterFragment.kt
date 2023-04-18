@@ -1,21 +1,29 @@
 package com.example.currencyconverter.fragments
 
-
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.models.CurrencyInfo
 import com.example.currencyconverter.sources.ConverterApi
+import com.example.currencyconverter.utils.EditTextUtils
 import com.example.currencyconverter.viewmodels.ConverterViewModel
 import com.google.gson.Gson
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.DecimalFormat
+import java.util.*
+
 
 const val SHARED_PREFS = "shared_prefs"
 
@@ -28,6 +36,7 @@ class ConverterFragment : Fragment() {
     //transfer later to viewModel
     private lateinit var leftCurrency : CurrencyInfo
     private lateinit var rightCurrency : CurrencyInfo
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,35 +60,11 @@ class ConverterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         getCurrencyDataFromSharedPrefs()
+        setFlags()
 
-        binding.leftCurrencyImage.setImageResource(leftCurrency.flag)
-        binding.rightCurrencyImage.setImageResource(rightCurrency.flag)
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val converterApiService = retrofit.create(ConverterApi::class.java)
-
-        /*converterApiService.getLatest(baseCurrency = "USD", currencies = "RUB").enqueue(object: Callback<SymbolsResponse>{
-            override fun onResponse(
-                call: Call<SymbolsResponse>,
-                response: Response<SymbolsResponse>
-            ) {
-                if (response.code()==200) {
-                    val result1 = "${response.body()?.data?.RUB?.code}"
-                    val result2 = "${response.body()?.data?.RUB?.value}"
-                    val output = "code of currency:$result1\nrate: $result2"
-                    binding.testTextView.text = output
-                }
-                else binding.testTextView.text = response.code().toString()
-            }
-
-            override fun onFailure(call: Call<SymbolsResponse>, t: Throwable) {
-                binding.testTextView.text = t.toString()
-            }
-        })*/
+        viewModel.convertedValue.observe(viewLifecycleOwner){newConvertedValue ->
+            binding.testTextView.text = getString(R.string.currency_input_format,inputCurrencyFormat(newConvertedValue))
+        }
 
         binding.settingsButton.setOnClickListener {
             val action = ConverterFragmentDirections.actionConverterFragmentToSettingsFragment()
@@ -100,6 +85,29 @@ class ConverterFragment : Fragment() {
             navigate(action)
         }
 
+        binding.startEditText.addDecimalLimiter()
+
+        binding.swapCurrenciesButton.setOnClickListener {
+            swapFlags()
+            setFlags()
+            viewModel.swapCurrencies(leftCurrency.code,rightCurrency.code)
+        }
+
+        binding.convertButton.setOnClickListener {
+            val inputValue = binding.startEditText.text.toString()
+            if (inputValue.isNotEmpty()) {
+                viewModel.updateExchangeRate(leftCurrency.code,rightCurrency.code)
+                viewModel.convert(inputValue.toFloat())
+            }
+            else Toast.makeText(context,R.string.no_input_error,Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    //use when show result with a getString "%1$s $"
+    private fun inputCurrencyFormat(input: String): String{
+        val decimalFormat = DecimalFormat("###,###,##0.00")
+        return decimalFormat.format(input.toDouble())
     }
 
     private fun navigate(action: NavDirections) {
@@ -118,6 +126,48 @@ class ConverterFragment : Fragment() {
         return Gson().fromJson(leftJsonCurrency, CurrencyInfo::class.java)
     }
 
+    private fun swapFlags(){
+        putSharedPrefs(LEFT_CURRENCY,rightCurrency)
+        putSharedPrefs(RIGHT_CURRENCY,leftCurrency)
+        getCurrencyDataFromSharedPrefs()
+    }
+
+    private fun putSharedPrefs(side: String, currencyInfo: CurrencyInfo){
+        val sharedPrefs = activity?.getSharedPreferences(SHARED_PREFS,0)
+        val jSonCurrency = Gson().toJson(currencyInfo, CurrencyInfo::class.java)
+        sharedPrefs?.let {
+            it.edit()
+                .putString(side, jSonCurrency)
+                .apply()
+        }
+    }
+
+    private fun setFlags(){
+        binding.leftCurrencyImage.setImageResource(leftCurrency.flag)
+        binding.rightCurrencyImage.setImageResource(rightCurrency.flag)
+    }
+
+    private fun EditText.addDecimalLimiter(maxLimit: Int = 2) {
+
+        this.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val str = this@addDecimalLimiter.text!!.toString()
+                if (str.isEmpty()) return
+                val str2 = EditTextUtils.decimalLimiter(str, maxLimit)
+                if (str2 != str) {
+                    this@addDecimalLimiter.setText(str2)
+                    val pos = this@addDecimalLimiter.text!!.length
+                    this@addDecimalLimiter.setSelection(pos)
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -129,4 +179,7 @@ class ConverterFragment : Fragment() {
         const val LEFT_CURRENCY = "left_currency"
         const val RIGHT_CURRENCY = "right_currency"
     }
+
+
+
 }

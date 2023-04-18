@@ -7,6 +7,8 @@
     <string name="money_input">Input</string>
     <string name="convert_result">Result</string>
     <string name="currency_image">currency image</string>
+    <string name="currency_input_format">%1$s $</string>
+    <string name="no_input_error">Please, enter a value</string>
 
     <!--Settings screen-->
     <string name="back_button">back button</string>
