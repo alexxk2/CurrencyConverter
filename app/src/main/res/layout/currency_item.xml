@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginHorizontal="2dp"
-        app:cardCornerRadius="@dimen/input_corner_radius_large"
+        app:cardCornerRadius="@dimen/input_corner_radius_medium"
         app:cardPreventCornerOverlap="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

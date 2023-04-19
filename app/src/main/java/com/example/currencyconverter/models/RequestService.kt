@@ -1,10 +1,12 @@
 package com.example.currencyconverter.models
 
+import androidx.lifecycle.MutableLiveData
 import com.example.currencyconverter.fragments.ConverterFragment.Companion.BASE_URL
 import com.example.currencyconverter.sources.ConverterApi
 import com.example.currencyconverter.sources.CurrencyCode
 import com.example.currencyconverter.sources.CurrencyNames
 import com.example.currencyconverter.sources.SymbolsResponse
+
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -12,6 +14,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 open class RequestService {
+
+    var isUpdated = false
+    private val _exchangeRate2 = MutableLiveData<Float?>()
+    val exchangeRate2: MutableLiveData<Float?> = _exchangeRate2
+    var exchangeRate: Float? = 1.0f
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
@@ -21,7 +28,7 @@ open class RequestService {
     private val converterApiService = retrofit.create(ConverterApi::class.java)
 
     fun getExchangeRate(baseCurrency: String, currencies: String): Float {
-        var exchangeRate: Float? = 1f
+
 
         converterApiService.getLatest(baseCurrency = baseCurrency, currencies = currencies)
             .enqueue(object :
@@ -31,6 +38,7 @@ open class RequestService {
                     response: Response<SymbolsResponse>
                 ) {
                     if (response.code() == 200) {
+                        isUpdated = true
 
                         exchangeRate = when (currencies) {
                             "RUB" -> response.body()?.data?.RUB?.value
@@ -55,14 +63,15 @@ open class RequestService {
                             "UZS" -> response.body()?.data?.UZS?.value
                             else -> response.body()?.data?.BTC?.value
                         }
+
                     }
                 }
-
                 override fun onFailure(call: Call<SymbolsResponse>, t: Throwable) {
-
                 }
             })
+        while (!isUpdated){}
         return exchangeRate!!
+
     }
 
     companion object {

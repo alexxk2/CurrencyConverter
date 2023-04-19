@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
@@ -15,14 +16,15 @@ import androidx.navigation.fragment.findNavController
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.models.CurrencyInfo
-import com.example.currencyconverter.sources.ConverterApi
+import com.example.currencyconverter.models.RequestService
+import com.example.currencyconverter.sources.SymbolsResponse
 import com.example.currencyconverter.utils.EditTextUtils
 import com.example.currencyconverter.viewmodels.ConverterViewModel
 import com.google.gson.Gson
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.DecimalFormat
-import java.util.*
 
 
 const val SHARED_PREFS = "shared_prefs"
@@ -32,16 +34,12 @@ class ConverterFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ConverterViewModel by viewModels()
 
-
-    //transfer later to viewModel
     private lateinit var leftCurrency : CurrencyInfo
     private lateinit var rightCurrency : CurrencyInfo
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         arguments?.let {
         }
     }
@@ -62,8 +60,18 @@ class ConverterFragment : Fragment() {
         getCurrencyDataFromSharedPrefs()
         setFlags()
 
+        //замылил, чтобы запросы просто так не делелись
+        //viewModel.makeRequest(leftCurrency.code,rightCurrency.code)
+
+        viewModel.isRateUpdated.observe(viewLifecycleOwner){isRateUpdated->
+            if (isRateUpdated){
+                binding.progressBar.isVisible = false
+                binding.convertButton.isVisible = true
+            }
+        }
+
         viewModel.convertedValue.observe(viewLifecycleOwner){newConvertedValue ->
-            binding.testTextView.text = getString(R.string.currency_input_format,inputCurrencyFormat(newConvertedValue))
+            binding.resultTextView.text = getString(R.string.currency_input_format,inputCurrencyFormat(newConvertedValue),rightCurrency.symbol)
         }
 
         binding.settingsButton.setOnClickListener {
@@ -94,17 +102,16 @@ class ConverterFragment : Fragment() {
         }
 
         binding.convertButton.setOnClickListener {
+
             val inputValue = binding.startEditText.text.toString()
             if (inputValue.isNotEmpty()) {
-                viewModel.updateExchangeRate(leftCurrency.code,rightCurrency.code)
                 viewModel.convert(inputValue.toFloat())
             }
             else Toast.makeText(context,R.string.no_input_error,Toast.LENGTH_SHORT).show()
         }
+
     }
 
-
-    //use when show result with a getString "%1$s $"
     private fun inputCurrencyFormat(input: String): String{
         val decimalFormat = DecimalFormat("###,###,##0.00")
         return decimalFormat.format(input.toDouble())
@@ -179,7 +186,5 @@ class ConverterFragment : Fragment() {
         const val LEFT_CURRENCY = "left_currency"
         const val RIGHT_CURRENCY = "right_currency"
     }
-
-
 
 }
