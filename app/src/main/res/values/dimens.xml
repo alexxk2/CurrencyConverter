@@ -3,7 +3,7 @@
 
     <!--Converter screen-->
     <dimen name="horizontal_margin">18dp</dimen>
-    <dimen name="input_corner_radius_large">32dp</dimen>
+    <dimen name="input_corner_radius_large">12dp</dimen>
     <dimen name="margin_input_and_flags">40dp</dimen>
     <dimen name="linear_layout_height">100dp</dimen>
     <dimen name="flag_long_side">135dp</dimen>

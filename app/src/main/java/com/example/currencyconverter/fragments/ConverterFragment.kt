@@ -1,11 +1,14 @@
 package com.example.currencyconverter.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -16,14 +19,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.models.CurrencyInfo
-import com.example.currencyconverter.models.RequestService
-import com.example.currencyconverter.sources.SymbolsResponse
 import com.example.currencyconverter.utils.EditTextUtils
 import com.example.currencyconverter.viewmodels.ConverterViewModel
 import com.google.gson.Gson
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.text.DecimalFormat
 
 
@@ -60,7 +58,7 @@ class ConverterFragment : Fragment() {
         getCurrencyDataFromSharedPrefs()
         setFlags()
 
-        //замылил, чтобы запросы просто так не делелись
+        //замылил, чтобы запросы просто так не делались
         //viewModel.makeRequest(leftCurrency.code,rightCurrency.code)
 
         viewModel.isRateUpdated.observe(viewLifecycleOwner){isRateUpdated->
@@ -71,7 +69,9 @@ class ConverterFragment : Fragment() {
         }
 
         viewModel.convertedValue.observe(viewLifecycleOwner){newConvertedValue ->
-            binding.resultTextView.text = getString(R.string.currency_input_format,inputCurrencyFormat(newConvertedValue),rightCurrency.symbol)
+            val convertingValue = inputCurrencyFormat(binding.startEditText.text.toString())
+            binding.baseCurrencyTextView.text = getString(R.string.base_currency_text_format,convertingValue,leftCurrency.symbol)
+            binding.resultTextView.text = getString(R.string.result_currency_text_format,inputCurrencyFormat(newConvertedValue),rightCurrency.symbol)
         }
 
         binding.settingsButton.setOnClickListener {
@@ -80,14 +80,12 @@ class ConverterFragment : Fragment() {
         }
 
         binding.leftCurrency.setOnClickListener {
-
             val action =
                 ConverterFragmentDirections.actionConverterFragmentToSearchFragment(true)
             navigate(action)
         }
 
         binding.rightCurrency.setOnClickListener {
-
             val action =
                 ConverterFragmentDirections.actionConverterFragmentToSearchFragment(false)
             navigate(action)
@@ -102,14 +100,65 @@ class ConverterFragment : Fragment() {
         }
 
         binding.convertButton.setOnClickListener {
-
-            val inputValue = binding.startEditText.text.toString()
-            if (inputValue.isNotEmpty()) {
-                viewModel.convert(inputValue.toFloat())
-            }
-            else Toast.makeText(context,R.string.no_input_error,Toast.LENGTH_SHORT).show()
+            convertWithGivenValue()
         }
 
+        binding.startEditText.setOnEditorActionListener { _, actionId, _ ->
+            return@setOnEditorActionListener when(actionId){
+                EditorInfo.IME_ACTION_GO -> {
+                    convertWithGivenValue()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        binding.buttonClear.setOnClickListener { clearSearchInput() }
+        manageHintMessage()
+    }
+
+    private fun changeClearButtonVisibility(input: Editable?) {
+        binding.buttonClear.visibility = if (input.isNullOrEmpty()) View.GONE
+        else View.VISIBLE
+    }
+    private fun clearSearchInput() {
+        binding.startEditText.setText("")
+        clearResults()
+    }
+
+    private fun manageHintMessage() {
+        binding.startEditText.hint = getString(R.string.enter_a_value)
+        binding.startEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.isNullOrEmpty()) binding.startEditText.hint =
+                    getString(R.string.enter_a_value)
+                else binding.startEditText.hint = ""
+
+                changeClearButtonVisibility(s)
+            }
+        })
+    }
+
+    private fun convertWithGivenValue(){
+        val inputValue = binding.startEditText.text.toString()
+        if (inputValue.isNotEmpty()) {
+            viewModel.convert(inputValue.toFloat())
+        }
+        else {
+            Toast.makeText(context, R.string.no_input_error, Toast.LENGTH_SHORT).show()
+            clearResults()
+        }
+        hideKeyboard(binding.startEditText)
+    }
+    private fun clearResults(){
+        binding.resultTextView.text = ""
+        binding.baseCurrencyTextView.text = ""
     }
 
     private fun inputCurrencyFormat(input: String): String{
@@ -122,11 +171,11 @@ class ConverterFragment : Fragment() {
     }
 
     private fun getCurrencyDataFromSharedPrefs(){
-        leftCurrency = sharedPrefsRequest(CurrencyInfo.DEFAULT_LEFT, LEFT_CURRENCY)
-        rightCurrency = sharedPrefsRequest(CurrencyInfo.DEFAULT_RIGHT, RIGHT_CURRENCY)
+        leftCurrency = getDataFromSharedPrefs(CurrencyInfo.DEFAULT_LEFT, LEFT_CURRENCY)
+        rightCurrency = getDataFromSharedPrefs(CurrencyInfo.DEFAULT_RIGHT, RIGHT_CURRENCY)
     }
 
-    private fun sharedPrefsRequest(defaultValue: CurrencyInfo, sharedPrefsName: String): CurrencyInfo {
+    private fun getDataFromSharedPrefs(defaultValue: CurrencyInfo, sharedPrefsName: String): CurrencyInfo {
         val sharedPrefs = activity?.getSharedPreferences(SHARED_PREFS,0)
         val defaultJsonLeft = Gson().toJson(defaultValue)
         val leftJsonCurrency = sharedPrefs?.getString(sharedPrefsName,defaultJsonLeft)
@@ -173,6 +222,12 @@ class ConverterFragment : Fragment() {
 
             }
         })
+    }
+
+    private fun hideKeyboard(view: View) {
+        val inputMethodManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onDestroyView() {
