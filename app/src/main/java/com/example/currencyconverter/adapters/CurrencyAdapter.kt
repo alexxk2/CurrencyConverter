@@ -8,10 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.CurrencyItemBinding
-import com.example.currencyconverter.fragments.ConverterFragmentDirections
-import com.example.currencyconverter.fragments.SearchFragment
-import com.example.currencyconverter.fragments.SearchFragmentDirections
 import com.example.currencyconverter.models.CurrencyInfo
+import com.example.currencyconverter.utils.CurrencyDiffCallback
 
 
 class CurrencyAdapter(

@@ -10,13 +10,25 @@
         android:id="@+id/convert_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/horizontal_margin"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/change_currency"
         android:src="@drawable/convert_currency"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/horizontal_margin"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/start_input_layout"
@@ -24,12 +36,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/horizontal_margin"
-        android:backgroundTint="@color/white"
-        android:hint="@string/money_input"
-        app:boxCornerRadiusBottomEnd="@dimen/input_corner_radius_medium"
-        app:boxCornerRadiusBottomStart="@dimen/input_corner_radius_medium"
-        app:boxCornerRadiusTopEnd="@dimen/input_corner_radius_medium"
-        app:boxCornerRadiusTopStart="@dimen/input_corner_radius_medium"
+        app:boxCornerRadiusBottomEnd="@dimen/input_corner_radius_large"
+        app:boxCornerRadiusBottomStart="@dimen/input_corner_radius_large"
+        app:boxCornerRadiusTopEnd="@dimen/input_corner_radius_large"
+        app:boxCornerRadiusTopStart="@dimen/input_corner_radius_large"
+        app:hintTextColor="@color/grey"
         app:hintAnimationEnabled="true"
         app:hintEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,43 +49,31 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:imeOptions="actionGo"
             android:id="@+id/start_edit_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:digits="0123456789"
-            android:inputType="numberDecimal" />
+            android:background="@drawable/edit_text_bg"
+            android:digits="1234567890."
+            android:inputType="numberDecimal"
+            android:maxLength="14"
+            android:textSize="16sp" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/end_input_layout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
+    <ImageButton
+        android:id="@+id/button_clear"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/horizontal_margin"
-        android:backgroundTint="@color/white"
-        android:focusable="false"
-        android:hint="@string/convert_result"
-        app:boxCornerRadiusBottomEnd="@dimen/input_corner_radius_medium"
-        app:boxCornerRadiusBottomStart="@dimen/input_corner_radius_medium"
-        app:boxCornerRadiusTopEnd="@dimen/input_corner_radius_medium"
-        app:boxCornerRadiusTopStart="@dimen/input_corner_radius_medium"
-        app:hintAnimationEnabled="true"
-        app:hintEnabled="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/convert_button"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/end_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:digits="0123456789"
-            android:inputType="numberDecimal" />
-    </com.google.android.material.textfield.TextInputLayout>
-
+        android:layout_marginEnd="@dimen/clear_button_margin_end"
+        android:layout_marginTop="@dimen/clear_button_margin_top"
+        app:layout_constraintBottom_toBottomOf="@+id/start_input_layout"
+        app:layout_constraintTop_toTopOf="@id/start_input_layout"
+        app:layout_constraintEnd_toEndOf="@id/start_input_layout"
+        android:visibility="gone"
+        android:src="@drawable/ic_clear"
+        android:contentDescription="@string/clear_button"
+        android:background="?android:attr/selectableItemBackgroundBorderless"/>
 
     <LinearLayout
         android:id="@+id/linear_lay"
@@ -91,8 +90,8 @@
             android:id="@+id/left_currency"
             android:layout_width="@dimen/flag_long_side"
             android:layout_height="@dimen/flag_short_side"
-            android:elevation="0dp"
             android:clickable="true"
+            android:elevation="0dp"
             android:focusable="true"
             app:cardCornerRadius="@dimen/flag_corner_radius">
 
@@ -101,8 +100,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/red"
-                android:scaleType="centerCrop"
-                android:contentDescription="@string/currency_image" />
+                android:contentDescription="@string/currency_image"
+                android:scaleType="centerCrop" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -120,8 +119,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/blue"
-                android:scaleType="centerCrop"
-                android:contentDescription="@string/currency_image" />
+                android:contentDescription="@string/currency_image"
+                android:scaleType="centerCrop" />
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
@@ -156,19 +155,35 @@
         android:id="@+id/settings_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="@dimen/navigation_buttons_margin"
         android:layout_marginEnd="@dimen/navigation_buttons_margin"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:src="@drawable/ic_settings"
-        />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/test_text_view"
+        android:id="@+id/base_currency_text_view"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/navigation_buttons_margin"
+        android:paddingEnd="86dp"
+        android:textAlignment="viewEnd"
+        android:textSize="22sp"
+        app:layout_constraintTop_toBottomOf="@+id/start_input_layout"
+        tools:text="1234567890123456" />
+
+    <TextView
+        android:id="@+id/result_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/clear_button_margin_end"
+        android:paddingEnd="86dp"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/soft_black"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/base_currency_text_view"
+        tools:text="1234567890123456" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

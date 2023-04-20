@@ -1,4 +1,4 @@
-package com.example.currencyconverter.adapters
+package com.example.currencyconverter.utils
 
 import android.media.audiofx.DynamicsProcessing
 import androidx.recyclerview.widget.DiffUtil

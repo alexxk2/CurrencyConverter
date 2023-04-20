@@ -1,21 +1,29 @@
 package com.example.currencyconverter.fragments
 
-
+import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.models.CurrencyInfo
-import com.example.currencyconverter.sources.ConverterApi
+import com.example.currencyconverter.utils.EditTextUtils
 import com.example.currencyconverter.viewmodels.ConverterViewModel
 import com.google.gson.Gson
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import java.text.DecimalFormat
+
 
 const val SHARED_PREFS = "shared_prefs"
 
@@ -24,15 +32,12 @@ class ConverterFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: ConverterViewModel by viewModels()
 
-
-    //transfer later to viewModel
     private lateinit var leftCurrency : CurrencyInfo
     private lateinit var rightCurrency : CurrencyInfo
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         arguments?.let {
         }
     }
@@ -51,35 +56,23 @@ class ConverterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         getCurrencyDataFromSharedPrefs()
+        setFlags()
 
-        binding.leftCurrencyImage.setImageResource(leftCurrency.flag)
-        binding.rightCurrencyImage.setImageResource(rightCurrency.flag)
+        //замылил, чтобы запросы просто так не делались
+        //viewModel.makeRequest(leftCurrency.code,rightCurrency.code)
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val converterApiService = retrofit.create(ConverterApi::class.java)
-
-        /*converterApiService.getLatest(baseCurrency = "USD", currencies = "RUB").enqueue(object: Callback<SymbolsResponse>{
-            override fun onResponse(
-                call: Call<SymbolsResponse>,
-                response: Response<SymbolsResponse>
-            ) {
-                if (response.code()==200) {
-                    val result1 = "${response.body()?.data?.RUB?.code}"
-                    val result2 = "${response.body()?.data?.RUB?.value}"
-                    val output = "code of currency:$result1\nrate: $result2"
-                    binding.testTextView.text = output
-                }
-                else binding.testTextView.text = response.code().toString()
+        viewModel.isRateUpdated.observe(viewLifecycleOwner){isRateUpdated->
+            if (isRateUpdated){
+                binding.progressBar.isVisible = false
+                binding.convertButton.isVisible = true
             }
+        }
 
-            override fun onFailure(call: Call<SymbolsResponse>, t: Throwable) {
-                binding.testTextView.text = t.toString()
-            }
-        })*/
+        viewModel.convertedValue.observe(viewLifecycleOwner){newConvertedValue ->
+            val convertingValue = inputCurrencyFormat(binding.startEditText.text.toString())
+            binding.baseCurrencyTextView.text = getString(R.string.base_currency_text_format,convertingValue,leftCurrency.symbol)
+            binding.resultTextView.text = getString(R.string.result_currency_text_format,inputCurrencyFormat(newConvertedValue),rightCurrency.symbol)
+        }
 
         binding.settingsButton.setOnClickListener {
             val action = ConverterFragmentDirections.actionConverterFragmentToSettingsFragment()
@@ -87,19 +80,90 @@ class ConverterFragment : Fragment() {
         }
 
         binding.leftCurrency.setOnClickListener {
-
             val action =
                 ConverterFragmentDirections.actionConverterFragmentToSearchFragment(true)
             navigate(action)
         }
 
         binding.rightCurrency.setOnClickListener {
-
             val action =
                 ConverterFragmentDirections.actionConverterFragmentToSearchFragment(false)
             navigate(action)
         }
 
+        binding.startEditText.addDecimalLimiter()
+
+        binding.swapCurrenciesButton.setOnClickListener {
+            swapFlags()
+            setFlags()
+            viewModel.swapCurrencies(leftCurrency.code,rightCurrency.code)
+        }
+
+        binding.convertButton.setOnClickListener {
+            convertWithGivenValue()
+        }
+
+        binding.startEditText.setOnEditorActionListener { _, actionId, _ ->
+            return@setOnEditorActionListener when(actionId){
+                EditorInfo.IME_ACTION_GO -> {
+                    convertWithGivenValue()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        binding.buttonClear.setOnClickListener { clearSearchInput() }
+        manageHintMessage()
+    }
+
+    private fun changeClearButtonVisibility(input: Editable?) {
+        binding.buttonClear.visibility = if (input.isNullOrEmpty()) View.GONE
+        else View.VISIBLE
+    }
+    private fun clearSearchInput() {
+        binding.startEditText.setText("")
+        clearResults()
+    }
+
+    private fun manageHintMessage() {
+        binding.startEditText.hint = getString(R.string.enter_a_value)
+        binding.startEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                if (s.isNullOrEmpty()) binding.startEditText.hint =
+                    getString(R.string.enter_a_value)
+                else binding.startEditText.hint = ""
+
+                changeClearButtonVisibility(s)
+            }
+        })
+    }
+
+    private fun convertWithGivenValue(){
+        val inputValue = binding.startEditText.text.toString()
+        if (inputValue.isNotEmpty()) {
+            viewModel.convert(inputValue.toFloat())
+        }
+        else {
+            Toast.makeText(context, R.string.no_input_error, Toast.LENGTH_SHORT).show()
+            clearResults()
+        }
+        hideKeyboard(binding.startEditText)
+    }
+    private fun clearResults(){
+        binding.resultTextView.text = ""
+        binding.baseCurrencyTextView.text = ""
+    }
+
+    private fun inputCurrencyFormat(input: String): String{
+        val decimalFormat = DecimalFormat("###,###,##0.00")
+        return decimalFormat.format(input.toDouble())
     }
 
     private fun navigate(action: NavDirections) {
@@ -107,15 +171,63 @@ class ConverterFragment : Fragment() {
     }
 
     private fun getCurrencyDataFromSharedPrefs(){
-        leftCurrency = sharedPrefsRequest(CurrencyInfo.DEFAULT_LEFT, LEFT_CURRENCY)
-        rightCurrency = sharedPrefsRequest(CurrencyInfo.DEFAULT_RIGHT, RIGHT_CURRENCY)
+        leftCurrency = getDataFromSharedPrefs(CurrencyInfo.DEFAULT_LEFT, LEFT_CURRENCY)
+        rightCurrency = getDataFromSharedPrefs(CurrencyInfo.DEFAULT_RIGHT, RIGHT_CURRENCY)
     }
 
-    private fun sharedPrefsRequest(defaultValue: CurrencyInfo, sharedPrefsName: String): CurrencyInfo {
+    private fun getDataFromSharedPrefs(defaultValue: CurrencyInfo, sharedPrefsName: String): CurrencyInfo {
         val sharedPrefs = activity?.getSharedPreferences(SHARED_PREFS,0)
         val defaultJsonLeft = Gson().toJson(defaultValue)
         val leftJsonCurrency = sharedPrefs?.getString(sharedPrefsName,defaultJsonLeft)
         return Gson().fromJson(leftJsonCurrency, CurrencyInfo::class.java)
+    }
+
+    private fun swapFlags(){
+        putSharedPrefs(LEFT_CURRENCY,rightCurrency)
+        putSharedPrefs(RIGHT_CURRENCY,leftCurrency)
+        getCurrencyDataFromSharedPrefs()
+    }
+
+    private fun putSharedPrefs(side: String, currencyInfo: CurrencyInfo){
+        val sharedPrefs = activity?.getSharedPreferences(SHARED_PREFS,0)
+        val jSonCurrency = Gson().toJson(currencyInfo, CurrencyInfo::class.java)
+        sharedPrefs?.let {
+            it.edit()
+                .putString(side, jSonCurrency)
+                .apply()
+        }
+    }
+
+    private fun setFlags(){
+        binding.leftCurrencyImage.setImageResource(leftCurrency.flag)
+        binding.rightCurrencyImage.setImageResource(rightCurrency.flag)
+    }
+
+    private fun EditText.addDecimalLimiter(maxLimit: Int = 2) {
+
+        this.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                val str = this@addDecimalLimiter.text!!.toString()
+                if (str.isEmpty()) return
+                val str2 = EditTextUtils.decimalLimiter(str, maxLimit)
+                if (str2 != str) {
+                    this@addDecimalLimiter.setText(str2)
+                    val pos = this@addDecimalLimiter.text!!.length
+                    this@addDecimalLimiter.setSelection(pos)
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
+    }
+
+    private fun hideKeyboard(view: View) {
+        val inputMethodManager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onDestroyView() {
@@ -129,4 +241,5 @@ class ConverterFragment : Fragment() {
         const val LEFT_CURRENCY = "left_currency"
         const val RIGHT_CURRENCY = "right_currency"
     }
+
 }
