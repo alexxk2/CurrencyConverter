@@ -13,13 +13,4 @@ open class ConverterService {
         return "${currencyInput * rate}"
     }
 
-    fun calculateReverse(
-        currencyInput: BigDecimal,
-        exchangeRate: Float
-    ): String {
-        val input = currencyInput
-        val rate = exchangeRate.toBigDecimal()
-        return "${input / rate}"
-    }
-
 }

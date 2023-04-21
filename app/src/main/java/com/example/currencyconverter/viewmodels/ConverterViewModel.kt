@@ -3,14 +3,11 @@ package com.example.currencyconverter.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.currencyconverter.models.ConverterService
-import com.example.currencyconverter.models.RequestService
-import com.example.currencyconverter.sources.ConverterApi
+import com.example.currencyconverter.sources.RequestService
 import com.example.currencyconverter.sources.SymbolsResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class ConverterViewModel : ViewModel() {
 
@@ -21,50 +18,31 @@ class ConverterViewModel : ViewModel() {
     private val _isRateUpdated = MutableLiveData<Boolean>(true)//поменять на фолс после тестов
     val isRateUpdated: MutableLiveData<Boolean> = _isRateUpdated
 
+    private val _conversionCounter  = MutableLiveData(1)
+    val conversionCounter: MutableLiveData<Int> = _conversionCounter
+
     private var exchangeRate = 1.0f
-    //private var isRateUpdated = false
 
     private val converterService = object : ConverterService() {}
     private val requestService = object : RequestService() {}
 
 
-
-    /*fun updateExchangeRate(baseCurrency: String, currencies: String) {
-            exchangeRate = requestService.getExchangeRate(baseCurrency,currencies)
-            isRateUpdated = true
-    }*/
-
-    /*fun updateExchangeRateInViewModel(rate: Float?) {
-       if (_isRateUpdated.value == true) return
-       else {
-           exchangeRate = rate!!
-           _isRateUpdated.value = true
-       }
-   }*/
-
-    fun convert(input: Float) {
+    fun convert(input: Double) {
         _convertedValue.value = converterService.convert(input.toBigDecimal(), exchangeRate)
+        _conversionCounter.value = _conversionCounter.value!! + 1
     }
 
-    fun swapCurrencies(baseCurrency: String, currencies: String){
+    fun swapCurrencies(){
             exchangeRate = 1/exchangeRate
     }
 
-    /*fun swapCurrencies(){
-            exchangeRate = 1/exchangeRate
-    }*/
+   fun resetConversionCounter(){
+       _conversionCounter.value = 0
+   }
 
     fun makeRequest(baseCurrency: String, currencies: String) {
 
-        var rateFromResponse: Float? = 1.0f
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl(RequestService.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val converterApiService = retrofit.create(ConverterApi::class.java)
-
+        val converterApiService = requestService.getConverterApiServiceInstance()
 
         converterApiService.getLatest(baseCurrency = baseCurrency, currencies = currencies)
             .enqueue(object :
@@ -103,8 +81,6 @@ class ConverterViewModel : ViewModel() {
                 override fun onFailure(call: Call<SymbolsResponse>, t: Throwable) {
                 }
             })
-
-
     }
 
 }

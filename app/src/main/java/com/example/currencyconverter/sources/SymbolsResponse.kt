@@ -6,6 +6,8 @@ data class SymbolsResponse(
     val data: CurrencyNames
 )
 
+
+
 data class CurrencyNames(
     val RUB: CurrencyCode,//Russian Ruble
     val USD: CurrencyCode,//US Dollar
