@@ -176,14 +176,15 @@
     <TextView
         android:id="@+id/result_text_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:layout_marginTop="@dimen/clear_button_margin_end"
         android:paddingEnd="86dp"
         android:textAlignment="viewEnd"
+        android:lines="1"
         android:textColor="@color/soft_black"
-        android:textSize="34sp"
+        android:autoSizeTextType="uniform"
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@+id/base_currency_text_view"
-        tools:text="1234567890123456" />
+        tools:text="1234567890123456"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

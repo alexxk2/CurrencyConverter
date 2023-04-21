@@ -23,6 +23,7 @@ import com.example.currencyconverter.utils.EditTextUtils
 import com.example.currencyconverter.viewmodels.ConverterViewModel
 import com.google.gson.Gson
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 
 
 const val SHARED_PREFS = "shared_prefs"
@@ -69,9 +70,16 @@ class ConverterFragment : Fragment() {
         }
 
         viewModel.convertedValue.observe(viewLifecycleOwner){newConvertedValue ->
-            val convertingValue = inputCurrencyFormat(binding.startEditText.text.toString())
+            val convertingValue = formatCurrencyDisplay(binding.startEditText.text.toString())
             binding.baseCurrencyTextView.text = getString(R.string.base_currency_text_format,convertingValue,leftCurrency.symbol)
-            binding.resultTextView.text = getString(R.string.result_currency_text_format,inputCurrencyFormat(newConvertedValue),rightCurrency.symbol)
+            binding.resultTextView.text = getString(R.string.result_currency_text_format,formatCurrencyDisplay(newConvertedValue),rightCurrency.symbol)
+        }
+
+        viewModel.conversionCounter.observe(viewLifecycleOwner){conversionCounter->
+            if (conversionCounter>=20){
+                viewModel.makeRequest(leftCurrency.code,rightCurrency.code)
+                viewModel.resetConversionCounter()
+            }
         }
 
         binding.settingsButton.setOnClickListener {
@@ -96,7 +104,7 @@ class ConverterFragment : Fragment() {
         binding.swapCurrenciesButton.setOnClickListener {
             swapFlags()
             setFlags()
-            viewModel.swapCurrencies(leftCurrency.code,rightCurrency.code)
+            viewModel.swapCurrencies()
         }
 
         binding.convertButton.setOnClickListener {
@@ -148,7 +156,7 @@ class ConverterFragment : Fragment() {
     private fun convertWithGivenValue(){
         val inputValue = binding.startEditText.text.toString()
         if (inputValue.isNotEmpty()) {
-            viewModel.convert(inputValue.toFloat())
+            viewModel.convert(inputValue.toDouble())
         }
         else {
             Toast.makeText(context, R.string.no_input_error, Toast.LENGTH_SHORT).show()
@@ -161,9 +169,15 @@ class ConverterFragment : Fragment() {
         binding.baseCurrencyTextView.text = ""
     }
 
-    private fun inputCurrencyFormat(input: String): String{
-        val decimalFormat = DecimalFormat("###,###,##0.00")
-        return decimalFormat.format(input.toDouble())
+    private fun formatCurrencyDisplay(input: String): String{
+        return if (input.isEmpty()) getString(R.string.last_input)
+        else {
+            val decimalFormat = DecimalFormat("###,###,##0.00")
+            val decimalFormatSymbols = DecimalFormatSymbols()
+            decimalFormatSymbols.groupingSeparator = ' '
+            decimalFormat.decimalFormatSymbols = decimalFormatSymbols
+            decimalFormat.format(input.toDouble())
+        }
     }
 
     private fun navigate(action: NavDirections) {
