@@ -10,6 +10,7 @@
     <dimen name="flag_short_side">90dp</dimen>
     <dimen name="flag_corner_radius">16dp</dimen>
     <dimen name="navigation_buttons_margin">24dp</dimen>
+    <dimen name="converter_edit_text_size">16sp</dimen>
 
     <!--Settings screen-->
 
@@ -17,6 +18,14 @@
     <dimen name="input_corner_radius_medium">24dp</dimen>
     <dimen name="clear_button_margin_end">12dp</dimen>
     <dimen name="clear_button_margin_top">5dp</dimen>
+    <dimen name="currency_item_height">50dp</dimen>
+    <dimen name="currency_card_height">40dp</dimen>
+    <dimen name="currency_card_sides_margin">2dp</dimen>
+    <dimen name="search_edit_text_size">14sp</dimen>
+    <dimen name="search_edit_height">52dp</dimen>
+    <dimen name="result_info_text_size">22sp</dimen>
+    <dimen name="results_padding_end">86dp</dimen>
+    <dimen name="convert_result_height">52dp</dimen>
 
 
 </resources>
