@@ -3,8 +3,8 @@ package com.example.currencyconverter.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.currencyconverter.models.ConverterService
-import com.example.currencyconverter.sources.RequestService
-import com.example.currencyconverter.sources.SymbolsResponse
+import com.example.currencyconverter.network.ConverterApi
+import com.example.currencyconverter.network.SymbolsResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,8 +24,6 @@ class ConverterViewModel : ViewModel() {
     private var exchangeRate = 1.0f
 
     private val converterService = object : ConverterService() {}
-    private val requestService = object : RequestService() {}
-
 
     fun convert(input: Double) {
         _convertedValue.value = converterService.convert(input.toBigDecimal(), exchangeRate)
@@ -42,9 +40,7 @@ class ConverterViewModel : ViewModel() {
 
     fun makeRequest(baseCurrency: String, currencies: String) {
 
-        val converterApiService = requestService.getConverterApiServiceInstance()
-
-        converterApiService.getLatest(baseCurrency = baseCurrency, currencies = currencies)
+        ConverterApi.retrofitService.getLatest(baseCurrency = baseCurrency, currencies = currencies)
             .enqueue(object :
                 Callback<SymbolsResponse> {
                 override fun onResponse(

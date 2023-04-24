@@ -1,10 +1,10 @@
-package com.example.currencyconverter.sources
+package com.example.currencyconverter.network
 
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface ConverterApi {
+interface ConverterApiService {
     @GET("/v3/status?apikey=$API_KEY")
     fun getStatus(): Call<SymbolsResponse>
 
@@ -19,7 +19,6 @@ interface ConverterApi {
     fun getCurrencies(
         @Query("apikey") apiKey: String = API_KEY
     ): Call<SymbolsResponse>
-
 
     companion object {
         const val API_KEY = "m8t10hvSal3gRP9IIlLERGTxd8CgbqcUHkoKKi1Q"

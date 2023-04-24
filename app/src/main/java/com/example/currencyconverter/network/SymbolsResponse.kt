@@ -1,12 +1,10 @@
-package com.example.currencyconverter.sources
+package com.example.currencyconverter.network
 
 
 
 data class SymbolsResponse(
     val data: CurrencyNames
 )
-
-
 
 data class CurrencyNames(
     val RUB: CurrencyCode,//Russian Ruble
