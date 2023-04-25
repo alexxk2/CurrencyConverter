@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.currencyconverter.SHARED_PREFS
 import com.example.currencyconverter.adapters.CurrencyAdapter
 import com.example.currencyconverter.databinding.FragmentSearchBinding
 import com.example.currencyconverter.models.CurrencyInfo

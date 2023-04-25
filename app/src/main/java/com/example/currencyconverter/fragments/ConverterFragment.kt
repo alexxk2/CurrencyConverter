@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.example.currencyconverter.R
+import com.example.currencyconverter.SHARED_PREFS
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.models.CurrencyInfo
 import com.example.currencyconverter.utils.EditTextUtils
@@ -26,7 +27,6 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
 
-const val SHARED_PREFS = "shared_prefs"
 
 class ConverterFragment : Fragment() {
     private var _binding: FragmentConverterBinding? = null

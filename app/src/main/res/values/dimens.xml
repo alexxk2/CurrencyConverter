@@ -13,6 +13,9 @@
     <dimen name="converter_edit_text_size">16sp</dimen>
 
     <!--Settings screen-->
+    <dimen name="settings_title_size">22sp</dimen>
+    <dimen name="settings_text_items_margin_top">48dp</dimen>
+    <dimen name="settings_text_items_size">16sp</dimen>
 
     <!--Search screen-->
     <dimen name="input_corner_radius_medium">24dp</dimen>

@@ -10,6 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.navigateUp
+import com.example.currencyconverter.App
+import com.example.currencyconverter.IS_DARK_THEME
+import com.example.currencyconverter.SHARED_PREFS
 import com.example.currencyconverter.databinding.FragmentSettingsBinding
 import com.example.currencyconverter.viewmodels.SettingsViewModel
 
@@ -40,10 +43,20 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setDarkThemeSwitcher()
+
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
         }
+        binding.darkThemeSwitcher.setOnCheckedChangeListener { _, isChecked ->
+            (activity?.applicationContext as App).switchNightMode(isChecked)
+        }
+    }
 
+    private fun setDarkThemeSwitcher(){
+        val sharedPrefs = activity?.getSharedPreferences(SHARED_PREFS,0)
+        val isDarkTheme = sharedPrefs?.getBoolean(IS_DARK_THEME,false)
+        binding.darkThemeSwitcher.isChecked = isDarkTheme!!
     }
 
     override fun onDestroyView() {

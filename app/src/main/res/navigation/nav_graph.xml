@@ -12,9 +12,7 @@
         tools:layout="@layout/fragment_converter" >
         <action
             android:id="@+id/action_converterFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out" />
+            app:destination="@id/settingsFragment" />
         <action
             android:id="@+id/action_converterFragment_to_searchFragment"
             app:destination="@id/searchFragment" />

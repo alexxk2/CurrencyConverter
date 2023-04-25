@@ -30,7 +30,7 @@
        <!-- <item name="android:background">@color/dark_grey</item>-->
     </style>
 
-    <style name="SearchScreenBackButton">
+    <style name="AnyScreenBackButton">
         <item name="android:src">@drawable/arrow_back_night</item>
         <item name="android:layout_marginStart">@dimen/navigation_buttons_margin</item>
         <item name="android:layout_marginTop">@dimen/navigation_buttons_margin</item>
@@ -154,4 +154,24 @@
         <item name="android:textColor">@color/soft_white</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+
+    <!--Settings screen-->
+    <style name="SettingsTitle">
+        <item name="android:text">@string/settings</item>
+        <item name="android:textSize">@dimen/settings_title_size</item>
+        <item name="android:textColor">@color/soft_white</item>
+        <item name="android:layout_marginStart">@dimen/navigation_buttons_margin</item>
+    </style>
+
+    <style name="SettingsTextItems">
+        <item name="android:textColor">@color/soft_white</item>
+        <item name="android:layout_marginTop">@dimen/settings_text_items_margin_top</item>
+        <item name="android:textSize">@dimen/settings_text_items_size</item>
+    </style>
+
+    <style name="SettingsSwitchers">
+        <item name="android:layout_marginEnd">@dimen/navigation_buttons_margin</item>
+    </style>
+
 </resources>
