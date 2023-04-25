@@ -72,9 +72,10 @@
     <!--Converter screen-->
     <style name="ConvertButton">
         <item name="android:layout_marginEnd">@dimen/horizontal_margin</item>
-        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
-        <item name="android:src">@drawable/convert_currency_night</item>
+        <item name="android:background">@drawable/convert_button_background_night</item>
+        <item name="android:src">@drawable/ic_convert_new_night</item>
         <item name="android:visibility">invisible</item>
+        <item name="android:layout_marginTop">6dp</item>
     </style>
 
     <style name="ProgressBar">
