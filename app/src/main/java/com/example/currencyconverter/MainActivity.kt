@@ -1,9 +1,11 @@
 package com.example.currencyconverter
 
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
