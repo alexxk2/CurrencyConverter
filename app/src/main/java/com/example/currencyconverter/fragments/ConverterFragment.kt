@@ -19,6 +19,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.currencyconverter.R
 import com.example.currencyconverter.SHARED_PREFS
 import com.example.currencyconverter.databinding.FragmentConverterBinding
+import com.example.currencyconverter.fragments.SearchFragment.Companion.LEFT_CURRENCY
+import com.example.currencyconverter.fragments.SearchFragment.Companion.RIGHT_CURRENCY
 import com.example.currencyconverter.models.CurrencyInfo
 import com.example.currencyconverter.utils.EditTextUtils
 import com.example.currencyconverter.viewmodels.ConverterViewModel

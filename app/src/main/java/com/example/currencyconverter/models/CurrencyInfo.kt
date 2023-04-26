@@ -7,13 +7,13 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class CurrencyInfo(
     val code: String,
-    val name: String,
+    val name: Int,
     val flag: Int,
     val symbol: String
 ): Parcelable{
     companion object{
-        @JvmStatic val DEFAULT_LEFT = CurrencyInfo("RUB", "Russian Ruble", R.drawable.ru,"₽")
-        @JvmStatic val DEFAULT_RIGHT = CurrencyInfo("USD", "US Dollar", R.drawable.us,"$")
+        @JvmStatic val DEFAULT_LEFT = CurrencyInfo("RUB", R.string.rub, R.drawable.ru,"₽")
+        @JvmStatic val DEFAULT_RIGHT = CurrencyInfo("USD", R.string.usd, R.drawable.us,"$")
     }
 
 }

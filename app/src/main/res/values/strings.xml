@@ -18,6 +18,8 @@
     <string name="settings">Settings</string>
     <string name="dark_theme">Dark theme</string>
     <string name="language">Language</string>
+    <string name="english">English</string>
+    <string name="russian">Russian</string>
 
     <!--Search screen-->
     <string name="clear_button">clear button</string>
@@ -27,5 +29,29 @@
     <string name="default_text_recycler_view">Australian Dollar • AUD</string>
     <string name="currency_text_recycler_view">%1$s • %2$s</string>
     <string name="flag">flag</string>
+
+    <!--Currencies names-->
+    <string name="rub">Russian Ruble</string>
+    <string name="usd">US Dollar</string>
+    <string name="eur">Euro</string>
+    <string name="aud">Australian Dollar</string>
+    <string name="brl">Brazilian Real</string>
+    <string name="byn">Belarusian Ruble</string>
+    <string name="cad">Canadian Dollar</string>
+    <string name="cny">Chinese Yuan</string>
+    <string name="egp">Egyptian Pound</string>
+    <string name="bgp">British Pound Sterling</string>
+    <string name="gel">Georgian Lari</string>
+    <string name="ils">Israeli New Sheqel</string>
+    <string name="inr">Indian Rupee</string>
+    <string name="jpy">Japanese Yen</string>
+    <string name="krw">South Korean Won</string>
+    <string name="kzt">Kazakhstani Tenge</string>
+    <string name="mxn">Mexican Peso</string>
+    <string name="sar">Saudi Riyal</string>
+    <string name="thb">Thai Baht</string>
+    <string name="uzs">Uzbekistan Som</string>
+    <string name="btc">Bitcoin</string>
+
 
 </resources>

@@ -16,6 +16,8 @@
     <dimen name="settings_title_size">22sp</dimen>
     <dimen name="settings_text_items_margin_top">48dp</dimen>
     <dimen name="settings_text_items_size">16sp</dimen>
+    <dimen name="language_chip_text_size">12sp</dimen>
+    <dimen name="chip_corner_radius">10dp</dimen>
 
     <!--Search screen-->
     <dimen name="input_corner_radius_medium">24dp</dimen>

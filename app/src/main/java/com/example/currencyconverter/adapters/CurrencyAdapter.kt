@@ -44,8 +44,9 @@ class CurrencyAdapter(
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
         val item = dataSet[position]
 
+        val itemName = context.getString(item.name)
         val currencyTextInfo =
-            context.getString(R.string.currency_text_recycler_view, item.name, item.code)
+            context.getString(R.string.currency_text_recycler_view, itemName, item.code)
 
         with(holder.binding) {
 
