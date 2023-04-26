@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources >
+    <string name="app_name">Конвертер валют</string>
+
+
+    <!--Converter screen-->
+    <string name="change_currency">кнопка для смены валюты</string>
+    <string name="money_input">Ввод</string>
+    <string name="convert_result">Результат</string>
+    <string name="currency_image">изображение валюты</string>
+    <string name="result_currency_text_format">%1$s %2$s  </string>
+    <string name="base_currency_text_format">%1$s %2$s =</string>
+    <string name="no_input_error">Пожалуйста введите значение</string>
+    <string name="enter_a_value">Введите значение</string>
+    <string name="last_input">Последний ввод</string>
+
+    <!--Settings screen-->
+    <string name="back_button">Кнопка назад</string>
+    <string name="settings">Настройки</string>
+    <string name="dark_theme">Темная тема</string>
+    <string name="language">Язык</string>
+    <string name="english">Английский</string>
+    <string name="russian">Русский</string>
+
+    <!--Search screen-->
+    <string name="clear_button">Кнопка очистить</string>
+    <string name="search">Поиск</string>
+
+    <!--Recycler view item-->
+    <string name="default_text_recycler_view">Австралийский доллар • AUD</string>
+    <string name="currency_text_recycler_view">%1$s • %2$s</string>
+    <string name="flag">флаг</string>
+
+
+    <!--Currencies names-->
+    <string name="rub">Российский рубль</string>
+    <string name="usd">Доллар США</string>
+    <string name="eur">Евро</string>
+    <string name="aud">Австралийский доллар</string>
+    <string name="brl">Бразильский реал</string>
+    <string name="byn">Белорусский рубль</string>
+    <string name="cad">Канадский доллар</string>
+    <string name="cny">Китайский юань</string>
+    <string name="egp">Египетский фунт</string>
+    <string name="bgp">Британский фунт стерлингов</string>
+    <string name="gel">Грузинский лари</string>
+    <string name="ils">Новый израильский шекель</string>
+    <string name="inr">Индийская рупия</string>
+    <string name="jpy">Японская иена</string>
+    <string name="krw">Южнокорейская вона</string>
+    <string name="kzt">Казахстанский тенге</string>
+    <string name="mxn">Мексиканское песо</string>
+    <string name="sar">Саудовский риял</string>
+    <string name="thb">Тайский бат</string>
+    <string name="uzs">Узбекский сум</string>
+    <string name="btc">Биткоин</string>
+</resources>

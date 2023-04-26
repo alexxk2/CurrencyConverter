@@ -51,6 +51,14 @@ class SettingsFragment : Fragment() {
         binding.darkThemeSwitcher.setOnCheckedChangeListener { _, isChecked ->
             (activity?.applicationContext as App).switchNightMode(isChecked)
         }
+
+        binding.chipEnglish.setOnClickListener {
+            (activity?.applicationContext as App).switchLanguage("en")
+        }
+        binding.chipRussian.setOnClickListener {
+            (activity?.applicationContext as App).switchLanguage("ru")
+        }
+
     }
 
     private fun setDarkThemeSwitcher(){

@@ -58,7 +58,9 @@ class SearchFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val filteredList = searchService.searchFilter(s.toString())
+
+                val filteredList = filterList(s.toString())
+
                 adapter.updateDataSet(filteredList)
             }
 
@@ -83,7 +85,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        adapter = CurrencyAdapter(searchService.listOfCurrencies, requireContext(), object: CurrencyAdapter.CurrencyActionListener{
+        adapter = CurrencyAdapter(searchService.defaultListOfCurrencies, requireContext(), object: CurrencyAdapter.CurrencyActionListener{
             override fun onClickCurrency(currencyInfo: CurrencyInfo) {
                 val action = SearchFragmentDirections.actionSearchFragmentToConverterFragment()
                 navigate(action)
@@ -107,8 +109,18 @@ class SearchFragment : Fragment() {
                 .putString(side, jSonCurrency)
                 .apply()
         }
-
     }
+
+    fun filterList(searchInput: String): MutableList<CurrencyInfo>{
+        val defaultListOfCurrencies = searchService.defaultListOfCurrencies
+
+        var tempList = mutableListOf<CurrencyInfo>()
+        tempList = defaultListOfCurrencies.filter {
+            it.code.contains(searchInput,true)||getString(it.name).contains(searchInput,true)
+        }.toMutableList()
+        return tempList
+    }
+
 
     private fun navigate(action: NavDirections){
         findNavController().navigate(action)

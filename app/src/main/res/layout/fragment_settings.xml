@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.SettingsFragment">
+    tools:context=".fragments.SettingsFragment"
+
+
+    >
 
     <ImageButton
         android:id="@+id/back_button"
@@ -45,20 +48,38 @@
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/dark_theme_switcher"
         style="@style/SettingsSwitchers"
+        android:theme="@style/Material3CustomTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:pointerIcon="arrow"
         app:layout_constraintBottom_toBottomOf="@+id/dark_theme_settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/dark_theme_settings" />
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/language_switcher"
-        style="@style/SettingsSwitchers"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/language_chip_group"
+        style="@style/LanguageChipGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@+id/language_settings"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/language_settings" />
+        app:layout_constraintTop_toTopOf="@+id/language_settings">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_english"
+            style="@style/LanguageChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/english" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_russian"
+            style="@style/LanguageChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/russian" />
+
+    </com.google.android.material.chip.ChipGroup>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

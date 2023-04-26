@@ -2,10 +2,6 @@
 <resources>
 
     <!--Search screen(currency_item)-->
-    <style name="CurrencyItemBackground"></style>
-
-    <style name="CurrencyItemLinearBackground"></style>
-
     <style name="CurrencyCardBackground">
         <item name="android:layout_marginHorizontal">@dimen/currency_card_sides_margin</item>
         <item name="cardCornerRadius">@dimen/input_corner_radius_medium</item>
@@ -164,8 +160,30 @@
     
     <style name="SettingsSwitchers">
         <item name="android:layout_marginEnd">@dimen/navigation_buttons_margin</item>
-
     </style>
+    
+    <style name="Material3CustomTheme" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorSecondaryContainer">@color/soft_blue</item>
+        <item name="colorSurface">@color/white</item>
+        <!--switch thumb and track colors unchecked -->
+        <!--<item name="colorOnSurface">@color/soft_blue</item>-->
+    </style>
+
+    <style name="LanguageChipGroup">
+        <item name="selectionRequired">true</item>
+        <item name="singleLine">true</item>
+        <item name="singleSelection">true</item>
+        <item name="android:layout_marginEnd">@dimen/navigation_buttons_margin</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:theme">@style/Material3CustomTheme</item>
+        <item name="checkedChip">@id/chip_english</item>
+    </style>
+
+    <style name="LanguageChip" parent="Widget.Material3.Chip.Filter">
+        <item name="android:textSize">@dimen/language_chip_text_size</item>
+        <item name="chipCornerRadius">@dimen/chip_corner_radius</item>
+    </style>
+
 
 
 </resources>

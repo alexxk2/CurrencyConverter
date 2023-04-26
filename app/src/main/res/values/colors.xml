@@ -17,6 +17,9 @@
     <color name="dark_grey">#CB4A4A4A</color>
     <color name="soft_grey">#54989898</color>
     <color name="light_grey">#54DBDBDB</color>
+    <color name="soft_blue">#ADDBFF</color>
+    <color name="soft_red">#FFA9A3</color>
+    <color name="light_red">#FDE0DE</color>
 
     <color name="soft_black">#353535</color>
     <color name="soft_white">#F8F8F8</color>

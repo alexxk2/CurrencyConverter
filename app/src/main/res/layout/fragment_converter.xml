@@ -9,8 +9,8 @@
     <ImageButton
         android:id="@+id/convert_button"
         style="@style/ConvertButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:contentDescription="@string/change_currency"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

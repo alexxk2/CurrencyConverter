@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Currency Converter</string>
 
+    <string name="app_name">Currency Converter</string>
 
     <!--Converter screen-->
     <string name="change_currency">button to change currency</string>
@@ -10,7 +11,7 @@
     <string name="result_currency_text_format">%1$s %2$s  </string>
     <string name="base_currency_text_format">%1$s %2$s =</string>
     <string name="no_input_error">Please enter a value</string>
-    <string name="enter_a_value">Ну введи же уже</string>
+    <string name="enter_a_value">Enter a value</string>
     <string name="last_input">Last input</string>
 
     <!--Settings screen-->
@@ -52,6 +53,5 @@
     <string name="thb">Thai Baht</string>
     <string name="uzs">Uzbekistan Som</string>
     <string name="btc">Bitcoin</string>
-
 
 </resources>
