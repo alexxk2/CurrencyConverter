@@ -2,6 +2,8 @@ package com.example.currencyconverter.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -12,6 +14,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
@@ -24,6 +27,7 @@ import com.example.currencyconverter.fragments.SearchFragment.Companion.RIGHT_CU
 import com.example.currencyconverter.models.CurrencyInfo
 import com.example.currencyconverter.utils.EditTextUtils
 import com.example.currencyconverter.viewmodels.ConverterViewModel
+import com.google.android.material.internal.ViewUtils.hideKeyboard
 import com.google.gson.Gson
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -34,9 +38,13 @@ class ConverterFragment : Fragment() {
     private var _binding: FragmentConverterBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ConverterViewModel by viewModels()
+    private val handler = Handler(Looper.getMainLooper())
+    private val convertRunnable = Runnable { convertWithGivenValue() }
 
     private lateinit var leftCurrency : CurrencyInfo
     private lateinit var rightCurrency : CurrencyInfo
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +69,7 @@ class ConverterFragment : Fragment() {
         getCurrencyDataFromSharedPrefs()
         setFlags()
 
-        //замылил, чтобы запросы просто так не делались
+        //замылил, чтобы запросы во время тестирования просто так не шли
         //viewModel.makeRequest(leftCurrency.code,rightCurrency.code)
 
         viewModel.isRateUpdated.observe(viewLifecycleOwner){isRateUpdated->
@@ -79,7 +87,7 @@ class ConverterFragment : Fragment() {
 
         viewModel.conversionCounter.observe(viewLifecycleOwner){conversionCounter->
             if (conversionCounter>=20){
-                viewModel.makeRequest(leftCurrency.code,rightCurrency.code)
+                //viewModel.makeRequest(leftCurrency.code,rightCurrency.code)
                 viewModel.resetConversionCounter()
             }
         }
@@ -110,13 +118,13 @@ class ConverterFragment : Fragment() {
         }
 
         binding.convertButton.setOnClickListener {
-            convertWithGivenValue()
+            convertDebounced()
         }
 
         binding.startEditText.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener when(actionId){
                 EditorInfo.IME_ACTION_GO -> {
-                    convertWithGivenValue()
+                    convertDebounced()
                     true
                 }
                 else -> false
@@ -143,6 +151,7 @@ class ConverterFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -156,16 +165,34 @@ class ConverterFragment : Fragment() {
     }
 
     private fun convertWithGivenValue(){
+        hideConvertProgressBar()
         val inputValue = binding.startEditText.text.toString()
-        if (inputValue.isNotEmpty()) {
-            viewModel.convert(inputValue.toDouble())
-        }
-        else {
+        viewModel.convert(inputValue.toDouble())
+    }
+
+    private fun convertDebounced() {
+        val inputValue = binding.startEditText.text.toString()
+        if (inputValue.isEmpty()){
             Toast.makeText(context, R.string.no_input_error, Toast.LENGTH_SHORT).show()
             clearResults()
         }
+        else{
+            showConvertProgressBar()
+            handler.removeCallbacks(convertRunnable)
+            handler.postDelayed(convertRunnable, CONVERT_DELAY)
+        }
         hideKeyboard(binding.startEditText)
     }
+
+    private fun showConvertProgressBar(){
+        clearResults()
+        binding.convertProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideConvertProgressBar(){
+        binding.convertProgressBar.visibility = View.INVISIBLE
+    }
+
     private fun clearResults(){
         binding.resultTextView.text = ""
         binding.baseCurrencyTextView.text = ""
@@ -252,10 +279,8 @@ class ConverterFragment : Fragment() {
     }
 
     companion object {
-        const val BASE_URL = "https://api.currencyapi.com"
-        const val API_KEY = "m8t10hvSal3gRP9IIlLERGTxd8CgbqcUHkoKKi1Q"
         const val LEFT_CURRENCY = "left_currency"
         const val RIGHT_CURRENCY = "right_currency"
+        private const val CONVERT_DELAY = 400L
     }
-
 }
