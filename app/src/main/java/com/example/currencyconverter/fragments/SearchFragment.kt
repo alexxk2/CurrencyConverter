@@ -48,8 +48,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         setRecyclerView()
 
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
@@ -58,9 +56,7 @@ class SearchFragment : Fragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
                 val filteredList = filterList(s.toString())
-
                 adapter.updateDataSet(filteredList)
             }
 
