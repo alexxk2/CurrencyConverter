@@ -62,7 +62,7 @@ class ConverterFragment : Fragment() {
         setFlags()
 
         with(viewModel){
-            //makeRequest(leftCurrency.code, rightCurrency.code)
+            makeRequest(leftCurrency.code, rightCurrency.code)
 
             isRateUpdated.observe(viewLifecycleOwner) { isRateUpdated ->
                 if (isRateUpdated) {
