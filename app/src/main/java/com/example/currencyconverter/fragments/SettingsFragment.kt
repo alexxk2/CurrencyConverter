@@ -1,16 +1,12 @@
 package com.example.currencyconverter.fragments
 
-
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.navigateUp
 import com.example.currencyconverter.App
 import com.example.currencyconverter.IS_DARK_THEME
 import com.example.currencyconverter.LANGUAGE

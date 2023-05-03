@@ -14,20 +14,17 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
-import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.currencyconverter.R
 import com.example.currencyconverter.SHARED_PREFS
 import com.example.currencyconverter.databinding.FragmentConverterBinding
-import com.example.currencyconverter.fragments.SearchFragment.Companion.LEFT_CURRENCY
-import com.example.currencyconverter.fragments.SearchFragment.Companion.RIGHT_CURRENCY
 import com.example.currencyconverter.models.CurrencyInfo
 import com.example.currencyconverter.utils.EditTextUtils
 import com.example.currencyconverter.viewmodels.ConverterViewModel
-import com.google.android.material.internal.ViewUtils.hideKeyboard
 import com.google.gson.Gson
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -253,8 +250,13 @@ class ConverterFragment : Fragment() {
     }
 
     private fun setFlags(){
-        binding.leftCurrencyImage.setImageResource(leftCurrency.flag)
-        binding.rightCurrencyImage.setImageResource(rightCurrency.flag)
+        Glide.with(requireContext())
+            .load(leftCurrency.flag)
+            .into(binding.leftCurrencyImage)
+
+        Glide.with(requireContext())
+            .load(rightCurrency.flag)
+            .into(binding.rightCurrencyImage)
     }
 
     private fun EditText.addDecimalLimiter(maxLimit: Int = 2) {
