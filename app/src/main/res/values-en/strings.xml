@@ -22,16 +22,17 @@
     <string name="english">English</string>
     <string name="russian">Russian</string>
 
-    <!--Search screen-->
-    <string name="clear_button">clear button</string>
-    <string name="search">Search</string>
+
 
     <!--Recycler view item-->
     <string name="default_text_recycler_view">Australian Dollar • AUD</string>
     <string name="currency_text_recycler_view">%1$s • %2$s</string>
     <string name="flag">flag</string>
 
-    <!--Currencies names-->
+    <!--Search screen-->
+    <string name="clear_button">clear button</string>
+    <string name="search">Search</string>
+
     <string name="rub">Russian Ruble</string>
     <string name="usd">US Dollar</string>
     <string name="eur">Euro</string>

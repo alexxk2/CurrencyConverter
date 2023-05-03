@@ -32,8 +32,6 @@ import com.google.gson.Gson
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
-
-
 class ConverterFragment : Fragment() {
     private var _binding: FragmentConverterBinding? = null
     private val binding get() = _binding!!
@@ -43,9 +41,6 @@ class ConverterFragment : Fragment() {
 
     private lateinit var leftCurrency : CurrencyInfo
     private lateinit var rightCurrency : CurrencyInfo
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,69 +64,83 @@ class ConverterFragment : Fragment() {
         getCurrencyDataFromSharedPrefs()
         setFlags()
 
-        //замылил, чтобы запросы во время тестирования просто так не шли
-        //viewModel.makeRequest(leftCurrency.code,rightCurrency.code)
+        with(viewModel){
+            makeRequest(leftCurrency.code, rightCurrency.code)
 
-        viewModel.isRateUpdated.observe(viewLifecycleOwner){isRateUpdated->
-            if (isRateUpdated){
-                binding.progressBar.isVisible = false
-                binding.convertButton.isVisible = true
-            }
-        }
-
-        viewModel.convertedValue.observe(viewLifecycleOwner){newConvertedValue ->
-            val convertingValue = formatCurrencyDisplay(binding.startEditText.text.toString())
-            binding.baseCurrencyTextView.text = getString(R.string.base_currency_text_format,convertingValue,leftCurrency.symbol)
-            binding.resultTextView.text = getString(R.string.result_currency_text_format,formatCurrencyDisplay(newConvertedValue),rightCurrency.symbol)
-        }
-
-        viewModel.conversionCounter.observe(viewLifecycleOwner){conversionCounter->
-            if (conversionCounter>=20){
-                //viewModel.makeRequest(leftCurrency.code,rightCurrency.code)
-                viewModel.resetConversionCounter()
-            }
-        }
-
-        binding.settingsButton.setOnClickListener {
-            val action = ConverterFragmentDirections.actionConverterFragmentToSettingsFragment()
-            navigate(action)
-        }
-
-        binding.leftCurrency.setOnClickListener {
-            val action =
-                ConverterFragmentDirections.actionConverterFragmentToSearchFragment(true)
-            navigate(action)
-        }
-
-        binding.rightCurrency.setOnClickListener {
-            val action =
-                ConverterFragmentDirections.actionConverterFragmentToSearchFragment(false)
-            navigate(action)
-        }
-
-        binding.startEditText.addDecimalLimiter()
-
-        binding.swapCurrenciesButton.setOnClickListener {
-            swapFlags()
-            setFlags()
-            viewModel.swapCurrencies()
-        }
-
-        binding.convertButton.setOnClickListener {
-            convertDebounced()
-        }
-
-        binding.startEditText.setOnEditorActionListener { _, actionId, _ ->
-            return@setOnEditorActionListener when(actionId){
-                EditorInfo.IME_ACTION_GO -> {
-                    convertDebounced()
-                    true
+            isRateUpdated.observe(viewLifecycleOwner) { isRateUpdated ->
+                if (isRateUpdated) {
+                    binding.progressBar.isVisible = false
+                    binding.convertButton.isVisible = true
                 }
-                else -> false
+            }
+
+            convertedValue.observe(viewLifecycleOwner) { newConvertedValue ->
+                val convertingValue = formatCurrencyDisplay(binding.startEditText.text.toString())
+                binding.baseCurrencyTextView.text = getString(
+                    R.string.base_currency_text_format,
+                    convertingValue,
+                    leftCurrency.symbol
+                )
+                binding.resultTextView.text = getString(
+                    R.string.result_currency_text_format,
+                    formatCurrencyDisplay(newConvertedValue),
+                    rightCurrency.symbol
+                )
+            }
+
+            conversionCounter.observe(viewLifecycleOwner) { conversionCounter ->
+                if (conversionCounter >= 20) {
+                    makeRequest(leftCurrency.code, rightCurrency.code)
+                    resetConversionCounter()
+                }
             }
         }
 
-        binding.buttonClear.setOnClickListener { clearSearchInput() }
+
+        with(binding){
+            settingsButton.setOnClickListener {
+                val action = ConverterFragmentDirections.actionConverterFragmentToSettingsFragment()
+                navigate(action)
+            }
+
+            leftCurrency.setOnClickListener {
+                val action =
+                    ConverterFragmentDirections.actionConverterFragmentToSearchFragment(true)
+                navigate(action)
+            }
+
+            rightCurrency.setOnClickListener {
+                val action =
+                    ConverterFragmentDirections.actionConverterFragmentToSearchFragment(false)
+                navigate(action)
+            }
+
+            startEditText.addDecimalLimiter()
+
+            swapCurrenciesButton.setOnClickListener {
+                swapFlags()
+                setFlags()
+                viewModel.swapCurrencies()
+            }
+
+            convertButton.setOnClickListener {
+                convertDebounced()
+            }
+
+            startEditText.setOnEditorActionListener { _, actionId, _ ->
+                return@setOnEditorActionListener when (actionId) {
+                    EditorInfo.IME_ACTION_GO -> {
+                        convertDebounced()
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+
+            buttonClear.setOnClickListener { clearSearchInput() }
+        }
+
         manageHintMessage()
     }
 
@@ -194,8 +203,10 @@ class ConverterFragment : Fragment() {
     }
 
     private fun clearResults(){
-        binding.resultTextView.text = ""
-        binding.baseCurrencyTextView.text = ""
+        with(binding){
+            resultTextView.text = ""
+            baseCurrencyTextView.text = ""
+        }
     }
 
     private fun formatCurrencyDisplay(input: String): String{

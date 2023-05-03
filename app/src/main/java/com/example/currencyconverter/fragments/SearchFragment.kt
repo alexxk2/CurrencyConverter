@@ -6,11 +6,14 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.currencyconverter.R
 import com.example.currencyconverter.SHARED_PREFS
 import com.example.currencyconverter.adapters.CurrencyAdapter
 import com.example.currencyconverter.databinding.FragmentSearchBinding
@@ -50,25 +53,30 @@ class SearchFragment : Fragment() {
 
         setRecyclerView()
 
-        binding.searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        with(binding){
+            searchEditText.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
 
-            }
+                }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val filteredList = filterList(s.toString())
-                adapter.updateDataSet(filteredList)
-            }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    val filteredList = filterList(s.toString())
+                    adapter.updateDataSet(filteredList)
+                }
 
-            override fun afterTextChanged(s: Editable?) {
-                changeClearButtonVisibility(s)
-            }
-        })
+                override fun afterTextChanged(s: Editable?) {
+                    changeClearButtonVisibility(s)
+                }
+            })
 
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
-        binding.buttonClear.setOnClickListener { clearSearchInput() }
-
-
+            backButton.setOnClickListener { findNavController().navigateUp() }
+            buttonClear.setOnClickListener { clearSearchInput() }
+        }
     }
 
     private fun clearSearchInput() {
@@ -84,6 +92,7 @@ class SearchFragment : Fragment() {
         adapter = CurrencyAdapter(searchService.defaultListOfCurrencies, requireContext(), object: CurrencyAdapter.CurrencyActionListener{
             override fun onClickCurrency(currencyInfo: CurrencyInfo) {
                 val action = SearchFragmentDirections.actionSearchFragmentToConverterFragment()
+
                 navigate(action)
 
                 if (isLeftClicked) putSharedPrefs(LEFT_CURRENCY, currencyInfo)
@@ -92,9 +101,11 @@ class SearchFragment : Fragment() {
             }
 
         })
-        binding.recyclerView.adapter = adapter
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.recyclerView.setHasFixedSize(true)
+        with(binding){
+            recyclerView.adapter = adapter
+            recyclerView.layoutManager = LinearLayoutManager(requireContext())
+            recyclerView.setHasFixedSize(true)
+        }
     }
 
     private fun putSharedPrefs(side: String, currencyInfo: CurrencyInfo){
@@ -109,7 +120,6 @@ class SearchFragment : Fragment() {
 
     fun filterList(searchInput: String): MutableList<CurrencyInfo>{
         val defaultListOfCurrencies = searchService.defaultListOfCurrencies
-
         var tempList = mutableListOf<CurrencyInfo>()
         tempList = defaultListOfCurrencies.filter {
             it.code.contains(searchInput,true)||getString(it.name).contains(searchInput,true)

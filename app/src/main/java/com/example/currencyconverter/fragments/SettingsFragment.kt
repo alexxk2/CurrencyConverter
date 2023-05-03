@@ -1,6 +1,7 @@
 package com.example.currencyconverter.fragments
 
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,10 +13,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.navigateUp
 import com.example.currencyconverter.App
 import com.example.currencyconverter.IS_DARK_THEME
+import com.example.currencyconverter.LANGUAGE
 import com.example.currencyconverter.SHARED_PREFS
 import com.example.currencyconverter.databinding.FragmentSettingsBinding
 import com.example.currencyconverter.viewmodels.SettingsViewModel
-
 
 class SettingsFragment : Fragment() {
 
@@ -23,12 +24,10 @@ class SettingsFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: SettingsViewModel by viewModels()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        arguments?.let {
-
-        }
+        arguments?.let {}
     }
 
     override fun onCreateView(
@@ -44,6 +43,7 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setDarkThemeSwitcher()
+        setLanguageChip()
 
         binding.backButton.setOnClickListener {
             findNavController().navigateUp()
@@ -58,13 +58,27 @@ class SettingsFragment : Fragment() {
         binding.chipRussian.setOnClickListener {
             (activity?.applicationContext as App).switchLanguage("ru")
         }
-
     }
 
     private fun setDarkThemeSwitcher(){
         val sharedPrefs = activity?.getSharedPreferences(SHARED_PREFS,0)
         val isDarkTheme = sharedPrefs?.getBoolean(IS_DARK_THEME,false)
         binding.darkThemeSwitcher.isChecked = isDarkTheme!!
+    }
+
+    private fun setLanguageChip(){
+        val sharedPrefs = activity?.getSharedPreferences(SHARED_PREFS,0)
+        val currentLanguage = sharedPrefs?.getString(LANGUAGE,"en")
+        when(currentLanguage){
+            "en" ->{
+                binding.chipRussian.isChecked = false
+                binding.chipEnglish.isChecked = true
+            }
+            else -> {
+                binding.chipRussian.isChecked = true
+                binding.chipEnglish.isChecked = false
+            }
+        }
     }
 
     override fun onDestroyView() {
