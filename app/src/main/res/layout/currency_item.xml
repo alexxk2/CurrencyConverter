@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/currency_item_height">
 
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/currency_card_view"
         style="@style/CurrencyCardBackground"

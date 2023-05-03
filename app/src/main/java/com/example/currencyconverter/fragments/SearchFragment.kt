@@ -6,14 +6,11 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.currencyconverter.R
 import com.example.currencyconverter.SHARED_PREFS
 import com.example.currencyconverter.adapters.CurrencyAdapter
 import com.example.currencyconverter.databinding.FragmentSearchBinding
