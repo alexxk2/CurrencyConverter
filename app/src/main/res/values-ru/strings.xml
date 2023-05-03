@@ -22,17 +22,16 @@
     <string name="english">Английский</string>
     <string name="russian">Русский</string>
 
-    <!--Search screen-->
-    <string name="clear_button">Кнопка очистить</string>
-    <string name="search">Поиск</string>
 
     <!--Recycler view item-->
     <string name="default_text_recycler_view">Австралийский доллар • AUD</string>
     <string name="currency_text_recycler_view">%1$s • %2$s</string>
     <string name="flag">флаг</string>
 
+    <!--Search screen-->
+    <string name="clear_button">Кнопка очистить</string>
+    <string name="search">Поиск</string>
 
-    <!--Currencies names-->
     <string name="rub">Российский рубль</string>
     <string name="usd">Доллар США</string>
     <string name="eur">Евро</string>
@@ -54,4 +53,5 @@
     <string name="thb">Тайский бат</string>
     <string name="uzs">Узбекский сум</string>
     <string name="btc">Биткоин</string>
+
 </resources>

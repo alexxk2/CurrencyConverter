@@ -10,7 +10,7 @@
     <string name="result_currency_text_format">%1$s %2$s  </string>
     <string name="base_currency_text_format">%1$s %2$s =</string>
     <string name="no_input_error">Please enter a value</string>
-    <string name="enter_a_value">Ну введи же уже</string>
+    <string name="enter_a_value">Enter a value</string>
     <string name="last_input">Last input</string>
 
     <!--Settings screen-->
@@ -21,16 +21,16 @@
     <string name="english">English</string>
     <string name="russian">Russian</string>
 
-    <!--Search screen-->
-    <string name="clear_button">clear button</string>
-    <string name="search">Search</string>
 
     <!--Recycler view item-->
     <string name="default_text_recycler_view">Australian Dollar • AUD</string>
     <string name="currency_text_recycler_view">%1$s • %2$s</string>
     <string name="flag">flag</string>
 
-    <!--Currencies names-->
+    <!--Search screen-->
+    <string name="clear_button">clear button</string>
+    <string name="search">Search</string>
+
     <string name="rub">Russian Ruble</string>
     <string name="usd">US Dollar</string>
     <string name="eur">Euro</string>
@@ -52,6 +52,5 @@
     <string name="thb">Thai Baht</string>
     <string name="uzs">Uzbekistan Som</string>
     <string name="btc">Bitcoin</string>
-
 
 </resources>

@@ -15,7 +15,7 @@ class ConverterViewModel : ViewModel() {
     private val _convertedValue = MutableLiveData<String>()
     val convertedValue: MutableLiveData<String> = _convertedValue
 
-    private val _isRateUpdated = MutableLiveData<Boolean>(true)//поменять на фолс после тестов
+    private val _isRateUpdated = MutableLiveData<Boolean>(false)
     val isRateUpdated: MutableLiveData<Boolean> = _isRateUpdated
 
     private val _conversionCounter  = MutableLiveData(1)
