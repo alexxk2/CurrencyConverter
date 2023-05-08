@@ -11,6 +11,7 @@
     <dimen name="flag_corner_radius">16dp</dimen>
     <dimen name="navigation_buttons_margin">24dp</dimen>
     <dimen name="converter_edit_text_size">16sp</dimen>
+    <dimen name="error_components_margin">10dp</dimen>
 
     <!--Settings screen-->
     <dimen name="settings_title_size">22sp</dimen>
@@ -31,6 +32,7 @@
     <dimen name="result_info_text_size">22sp</dimen>
     <dimen name="results_padding_end">86dp</dimen>
     <dimen name="convert_result_height">52dp</dimen>
+    <dimen name="error_messege_width">300dp</dimen>
 
 
 </resources>

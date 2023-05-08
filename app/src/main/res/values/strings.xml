@@ -12,6 +12,9 @@
     <string name="no_input_error">Please enter a value</string>
     <string name="enter_a_value">Enter a value</string>
     <string name="last_input">Last input</string>
+    <string name="error_image">error_image</string>
+    <string name="refresh">Refresh</string>
+    <string name="error_message">Something went wrong. Please check internet connection or try again after a minute</string>
 
     <!--Settings screen-->
     <string name="back_button">back button</string>
@@ -52,5 +55,7 @@
     <string name="thb">Thai Baht</string>
     <string name="uzs">Uzbekistan Som</string>
     <string name="btc">Bitcoin</string>
+
+
 
 </resources>
