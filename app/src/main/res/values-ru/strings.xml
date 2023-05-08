@@ -13,6 +13,9 @@
     <string name="no_input_error">Пожалуйста введите значение</string>
     <string name="enter_a_value">Введите значение</string>
     <string name="last_input">Последний ввод</string>
+    <string name="error_image">Изображение ошибки</string>
+    <string name="refresh">Обновить</string>
+    <string name="error_message">Что-то пошло не так. Проверьте подключение к интернету или попробуйте чере минуту</string>
 
     <!--Settings screen-->
     <string name="back_button">Кнопка назад</string>

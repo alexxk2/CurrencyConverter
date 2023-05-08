@@ -24,6 +24,7 @@ import com.example.currencyconverter.SHARED_PREFS
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.models.CurrencyInfo
 import com.example.currencyconverter.utils.EditTextUtils
+import com.example.currencyconverter.viewmodels.ConverterApiStatus
 import com.example.currencyconverter.viewmodels.ConverterViewModel
 import com.google.gson.Gson
 import java.text.DecimalFormat
@@ -64,10 +65,23 @@ class ConverterFragment : Fragment() {
         with(viewModel){
             makeRequest(leftCurrency.code, rightCurrency.code)
 
-            isRateUpdated.observe(viewLifecycleOwner) { isRateUpdated ->
-                if (isRateUpdated) {
-                    binding.progressBar.isVisible = false
-                    binding.convertButton.isVisible = true
+            apiStatus.observe(viewLifecycleOwner){currentApiStatus ->
+                when(currentApiStatus){
+                    ConverterApiStatus.LOADING->{
+                        hideErrorViews()
+                        hideInputViews()
+                        showLoadingViews()
+                    }
+                    ConverterApiStatus.DONE -> {
+                        hideLoadingViews()
+                        hideErrorViews()
+                        showInputViews()
+                    }
+                    ConverterApiStatus.ERROR -> {
+                        hideLoadingViews()
+                        hideInputViews()
+                        showErrorViews()
+                    }
                 }
             }
 
@@ -136,8 +150,15 @@ class ConverterFragment : Fragment() {
             }
 
             buttonClear.setOnClickListener { clearSearchInput() }
+
         }
 
+        binding.refreshButton.setOnClickListener {
+            viewModel.makeRequest(
+                leftCurrency.code,
+                rightCurrency.code
+            )
+        }
         manageHintMessage()
     }
 
@@ -284,6 +305,50 @@ class ConverterFragment : Fragment() {
         val inputMethodManager =
             activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    private fun showInputViews(){
+        with(binding){
+            startInputLayout.visibility = View.VISIBLE
+            startEditText.visibility = View.VISIBLE
+            convertButton.visibility = View.VISIBLE
+            linearLayoutFlags.visibility = View.VISIBLE
+            swapCurrenciesButton.visibility = View.VISIBLE
+            swapBackground.visibility = View.VISIBLE
+            buttonClear.visibility = View.VISIBLE
+            resultTextView.visibility = View.VISIBLE
+            baseCurrencyTextView.visibility = View.VISIBLE
+        }
+    }
+
+    private fun hideInputViews(){
+        with(binding){
+            startInputLayout.visibility = View.INVISIBLE
+            startEditText.visibility = View.INVISIBLE
+            convertButton.visibility = View.INVISIBLE
+            linearLayoutFlags.visibility = View.INVISIBLE
+            swapCurrenciesButton.visibility = View.INVISIBLE
+            swapBackground.visibility = View.INVISIBLE
+            buttonClear.visibility = View.INVISIBLE
+            resultTextView.visibility = View.INVISIBLE
+            baseCurrencyTextView.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun showLoadingViews() {
+        binding.apiProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoadingViews() {
+        binding.apiProgressBar.visibility = View.INVISIBLE
+    }
+
+    private fun showErrorViews() {
+        binding.linearLayoutError.visibility = View.VISIBLE
+    }
+
+    private fun hideErrorViews() {
+        binding.linearLayoutError.visibility = View.INVISIBLE
     }
 
     override fun onDestroyView() {

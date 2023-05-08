@@ -9,17 +9,18 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ConverterViewModel : ViewModel() {
+enum class ConverterApiStatus{LOADING, DONE, ERROR}
 
+class ConverterViewModel : ViewModel() {
 
     private val _convertedValue = MutableLiveData<String>()
     val convertedValue: MutableLiveData<String> = _convertedValue
 
-    private val _isRateUpdated = MutableLiveData<Boolean>(false)
-    val isRateUpdated: MutableLiveData<Boolean> = _isRateUpdated
-
     private val _conversionCounter  = MutableLiveData(1)
     val conversionCounter: MutableLiveData<Int> = _conversionCounter
+
+    private val _apiStatus = MutableLiveData<ConverterApiStatus>()
+    val apiStatus: MutableLiveData<ConverterApiStatus> = _apiStatus
 
     private var exchangeRate = 1.0f
 
@@ -39,6 +40,7 @@ class ConverterViewModel : ViewModel() {
    }
 
     fun makeRequest(baseCurrency: String, currencies: String) {
+        _apiStatus.value = ConverterApiStatus.LOADING
 
         ConverterApi.retrofitService.getLatest(baseCurrency = baseCurrency, currencies = currencies)
             .enqueue(object :
@@ -71,12 +73,13 @@ class ConverterViewModel : ViewModel() {
                             "UZS" -> response.body()?.data?.UZS?.value ?: 1.0f
                             else -> response.body()?.data?.BTC?.value ?: 1.0f
                         }
-                        _isRateUpdated.value = true
+                        _apiStatus.value = ConverterApiStatus.DONE
                     }
+                    else _apiStatus.value = ConverterApiStatus.ERROR
                 }
                 override fun onFailure(call: Call<SymbolsResponse>, t: Throwable) {
+                    _apiStatus.value = ConverterApiStatus.ERROR
                 }
             })
     }
-
 }

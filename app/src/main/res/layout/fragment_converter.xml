@@ -17,12 +17,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
-        android:id="@+id/progress_bar"
+        android:id="@+id/api_progress_bar"
         style="@style/ProgressBar"
         android:layout_width="60dp"
         android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="@+id/start_input_layout"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/start_input_layout" />
 
     <ProgressBar
@@ -31,8 +32,8 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:visibility="invisible"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/base_currency_text_view" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -64,7 +65,7 @@
         app:layout_constraintTop_toTopOf="@id/start_input_layout" />
 
     <LinearLayout
-        android:id="@+id/linear_lay"
+        android:id="@+id/linear_layout_flags"
         android:layout_width="match_parent"
         android:layout_height="@dimen/linear_layout_height"
         android:layout_marginBottom="@dimen/margin_input_and_flags"
@@ -114,10 +115,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/change_currency"
-        app:layout_constraintBottom_toBottomOf="@+id/linear_lay"
+        app:layout_constraintBottom_toBottomOf="@+id/linear_layout_flags"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linear_lay" />
+        app:layout_constraintTop_toTopOf="@+id/linear_layout_flags" />
 
     <ImageButton
         android:id="@+id/swap_currencies_button"
@@ -125,34 +126,67 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/change_currency"
-        app:layout_constraintBottom_toBottomOf="@+id/linear_lay"
+        app:layout_constraintBottom_toBottomOf="@+id/linear_layout_flags"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linear_lay" />
+        app:layout_constraintTop_toTopOf="@+id/linear_layout_flags" />
 
     <ImageButton
         android:id="@+id/settings_button"
+        style="@style/SettingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/SettingButton"
         android:contentDescription="@string/settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/base_currency_text_view"
+        style="@style/ConverterResultTextInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/ConverterResultTextInfo"
         app:layout_constraintTop_toBottomOf="@+id/start_input_layout"
         tools:text="1234567890123456" />
 
     <TextView
         android:id="@+id/result_text_view"
+        style="@style/ConverterResult"
         android:layout_width="match_parent"
         android:layout_height="@dimen/convert_result_height"
-        style="@style/ConverterResult"
         app:layout_constraintTop_toBottomOf="@+id/base_currency_text_view"
         tools:text="1234567890123456" />
+
+    <LinearLayout
+        android:id="@+id/linear_layout_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/error_image"
+            style="@style/ErrorImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/error_image" />
+
+        <TextView
+            android:id="@+id/error_message"
+            style="@style/ErrorMessage"
+            android:layout_width="@dimen/error_messege_width"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/refresh_button"
+            style="@style/RefreshButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
