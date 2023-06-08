@@ -1,8 +1,6 @@
 package com.example.currencyconverter.utils
 
-import android.text.Editable
-import android.text.TextWatcher
-import android.widget.EditText
+
 
 class EditTextUtils {
 

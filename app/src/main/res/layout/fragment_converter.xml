@@ -23,7 +23,7 @@
         android:layout_height="60dp"
         app:layout_constraintBottom_toBottomOf="@+id/start_input_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="@dimen/horizontal_margin"
         app:layout_constraintTop_toTopOf="@+id/start_input_layout" />
 
     <ProgressBar

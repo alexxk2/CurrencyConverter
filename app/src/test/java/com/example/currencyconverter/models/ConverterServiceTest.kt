@@ -1,5 +1,6 @@
 package com.example.currencyconverter.models
 
+import com.example.currencyconverter.domain.ConverterService
 import org.junit.Assert.*
 
 import org.junit.Test
