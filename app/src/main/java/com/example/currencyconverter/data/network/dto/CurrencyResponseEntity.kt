@@ -1,10 +1,6 @@
-package com.example.currencyconverter.network
+package com.example.currencyconverter.data.network.dto
 
-
-
-data class SymbolsResponse(
-    val data: CurrencyNames
-)
+data class CurrencyResponseEntity(val data: CurrencyNames): Response()
 
 data class CurrencyNames(
     val RUB: CurrencyCode,//Russian Ruble
@@ -27,7 +23,7 @@ data class CurrencyNames(
     val SAR: CurrencyCode,//Saudi Riyal
     val THB: CurrencyCode,//Thai Baht
     val UZS: CurrencyCode,//Uzbekistan Som
-    val BTC: CurrencyCode//Bitcoin
+    val BTC: CurrencyCode,//Bitcoin
 )
 
 data class CurrencyCode(

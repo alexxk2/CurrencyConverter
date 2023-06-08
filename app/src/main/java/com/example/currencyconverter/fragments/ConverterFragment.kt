@@ -16,11 +16,13 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.currencyconverter.R
 import com.example.currencyconverter.SHARED_PREFS
+import com.example.currencyconverter.creator.Creator
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.models.CurrencyInfo
 import com.example.currencyconverter.utils.EditTextUtils
@@ -33,7 +35,8 @@ import java.text.DecimalFormatSymbols
 class ConverterFragment : Fragment() {
     private var _binding: FragmentConverterBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: ConverterViewModel by viewModels()
+    //private val viewModel: ConverterViewModel by viewModels()
+    private lateinit var viewModel: ConverterViewModel
     private val handler = Handler(Looper.getMainLooper())
     private val convertRunnable = Runnable { convertWithGivenValue() }
 
@@ -59,6 +62,7 @@ class ConverterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        createViewModel()
         getCurrencyDataFromSharedPrefs()
         setFlags()
 
@@ -160,6 +164,11 @@ class ConverterFragment : Fragment() {
             )
         }
         manageHintMessage()
+    }
+
+    private fun createViewModel(){
+        val networkRepository = Creator.provideNetworkRepository()
+        viewModel = ViewModelProvider(this,ConverterViewModel.getViewModelFactory(networkRepository))[ConverterViewModel::class.java]
     }
 
     private fun changeClearButtonVisibility(input: Editable?) {
