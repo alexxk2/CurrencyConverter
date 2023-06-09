@@ -1,4 +1,4 @@
-package com.example.currencyconverter.fragments
+package com.example.currencyconverter.presentation.settings.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +12,7 @@ import com.example.currencyconverter.IS_DARK_THEME
 import com.example.currencyconverter.LANGUAGE
 import com.example.currencyconverter.SHARED_PREFS
 import com.example.currencyconverter.databinding.FragmentSettingsBinding
-import com.example.currencyconverter.viewmodels.SettingsViewModel
+import com.example.currencyconverter.presentation.settings.view_model.SettingsViewModel
 
 class SettingsFragment : Fragment() {
 

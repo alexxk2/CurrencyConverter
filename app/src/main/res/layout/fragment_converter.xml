@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ConverterFragment">
+    tools:context=".presentation.converter.ui.ConverterFragment">
 
     <ImageButton
         android:id="@+id/convert_button"

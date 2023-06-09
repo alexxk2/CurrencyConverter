@@ -1,4 +1,4 @@
-package com.example.currencyconverter.viewmodels
+package com.example.currencyconverter.presentation.converter.view_model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.currencyconverter.domain.ConverterService
+import com.example.currencyconverter.domain.converter.ConvertCurrencyUseCase
 import com.example.currencyconverter.domain.network.GetExchangeRateUseCase
 import com.example.currencyconverter.domain.repositories.NetworkRepository
 import kotlinx.coroutines.launch
@@ -27,12 +27,11 @@ class ConverterViewModel(networkRepository: NetworkRepository) : ViewModel() {
 
     private var exchangeRate = 1.0f
 
-    private val converterService = object : ConverterService() {}
-
     private val getExchangeRateUseCase = GetExchangeRateUseCase(networkRepository)
+    private val convertCurrencyUseCase = ConvertCurrencyUseCase()
 
     fun convert(input: Double) {
-        _convertedValue.value = converterService.convert(input.toBigDecimal(), exchangeRate)
+        _convertedValue.value = convertCurrencyUseCase.execute(input.toBigDecimal(), exchangeRate)
         _conversionCounter.value = _conversionCounter.value!! + 1
     }
 

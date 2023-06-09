@@ -1,4 +1,4 @@
-package com.example.currencyconverter.fragments
+package com.example.currencyconverter.presentation.converter.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -13,9 +13,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
@@ -26,8 +24,8 @@ import com.example.currencyconverter.creator.Creator
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.models.CurrencyInfo
 import com.example.currencyconverter.utils.EditTextUtils
-import com.example.currencyconverter.viewmodels.ConverterApiStatus
-import com.example.currencyconverter.viewmodels.ConverterViewModel
+import com.example.currencyconverter.presentation.converter.view_model.ConverterApiStatus
+import com.example.currencyconverter.presentation.converter.view_model.ConverterViewModel
 import com.google.gson.Gson
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -35,7 +33,6 @@ import java.text.DecimalFormatSymbols
 class ConverterFragment : Fragment() {
     private var _binding: FragmentConverterBinding? = null
     private val binding get() = _binding!!
-    //private val viewModel: ConverterViewModel by viewModels()
     private lateinit var viewModel: ConverterViewModel
     private val handler = Handler(Looper.getMainLooper())
     private val convertRunnable = Runnable { convertWithGivenValue() }
@@ -168,7 +165,8 @@ class ConverterFragment : Fragment() {
 
     private fun createViewModel(){
         val networkRepository = Creator.provideNetworkRepository()
-        viewModel = ViewModelProvider(this,ConverterViewModel.getViewModelFactory(networkRepository))[ConverterViewModel::class.java]
+        viewModel = ViewModelProvider(this,
+            ConverterViewModel.getViewModelFactory(networkRepository))[ConverterViewModel::class.java]
     }
 
     private fun changeClearButtonVisibility(input: Editable?) {
@@ -305,7 +303,6 @@ class ConverterFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
             }
         })
     }
