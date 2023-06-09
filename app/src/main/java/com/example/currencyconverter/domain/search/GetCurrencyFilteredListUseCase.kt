@@ -7,4 +7,5 @@ class GetCurrencyFilteredListUseCase(private val searchRepository: SearchReposit
 
     fun execute(searchInput: String): MutableList<CurrencyInfo> =
         searchRepository.getCurrencyFilteredList(searchInput)
+
 }

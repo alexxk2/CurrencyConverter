@@ -7,14 +7,19 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.currencyconverter.domain.converter.ConvertCurrencyUseCase
+import com.example.currencyconverter.domain.converter.DecimalLimitUseCase
 import com.example.currencyconverter.domain.network.GetExchangeRateUseCase
 import com.example.currencyconverter.domain.repositories.NetworkRepository
+import com.example.currencyconverter.domain.repositories.StorageRepository
+import com.example.currencyconverter.domain.storage.GetCurrencyFromStorageUseCase
+import com.example.currencyconverter.domain.storage.PutCurrencyInStorageUseCase
+import com.example.currencyconverter.models.CurrencyInfo
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
 enum class ConverterApiStatus{LOADING, DONE, ERROR}
 
-class ConverterViewModel(networkRepository: NetworkRepository) : ViewModel() {
+class ConverterViewModel(networkRepository: NetworkRepository, storageRepository: StorageRepository) : ViewModel() {
 
     private val _convertedValue = MutableLiveData<String>()
     val convertedValue: MutableLiveData<String> = _convertedValue
@@ -29,19 +34,26 @@ class ConverterViewModel(networkRepository: NetworkRepository) : ViewModel() {
 
     private val getExchangeRateUseCase = GetExchangeRateUseCase(networkRepository)
     private val convertCurrencyUseCase = ConvertCurrencyUseCase()
+    private val decimalLimitUseCase = DecimalLimitUseCase()
+    private val getCurrencyFromStorageUseCase = GetCurrencyFromStorageUseCase(storageRepository)
+    private val putCurrencyInStorageUseCase = PutCurrencyInStorageUseCase(storageRepository)
 
     fun convert(input: Double) {
         _convertedValue.value = convertCurrencyUseCase.execute(input.toBigDecimal(), exchangeRate)
         _conversionCounter.value = _conversionCounter.value!! + 1
     }
 
-    fun swapCurrencies(){
-            exchangeRate = 1/exchangeRate
+    fun swapCurrencies() {
+        exchangeRate = 1 / exchangeRate
     }
 
-   fun resetConversionCounter(){
-       _conversionCounter.value = 0
-   }
+    fun resetConversionCounter() {
+        _conversionCounter.value = 0
+    }
+
+    fun limitDecimal(beforeLimiting: String, maxDecimal: Int): String{
+        return decimalLimitUseCase.execute(beforeLimiting,maxDecimal)
+    }
 
     fun makeRequest(baseCurrency: String, currencies: String) {
         _apiStatus.value = ConverterApiStatus.LOADING
@@ -61,11 +73,22 @@ class ConverterViewModel(networkRepository: NetworkRepository) : ViewModel() {
         }
     }
 
+    fun putCurrencyInStorage(side: String, currencyInfo: CurrencyInfo){
+        putCurrencyInStorageUseCase.execute(side,currencyInfo)
+    }
+
+    fun getCurrencyFromStorage(defaultValue: CurrencyInfo, sharedPrefsName: String): CurrencyInfo{
+        return getCurrencyFromStorageUseCase.execute(defaultValue,sharedPrefsName)
+    }
+
     companion object {
-        fun getViewModelFactory(networkRepository: NetworkRepository): ViewModelProvider.Factory =
+        fun getViewModelFactory(networkRepository: NetworkRepository, storageRepository: StorageRepository): ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    ConverterViewModel(networkRepository = networkRepository)
+                    ConverterViewModel(
+                        networkRepository = networkRepository,
+                        storageRepository = storageRepository
+                    )
                 }
             }
     }
