@@ -1,4 +1,4 @@
-package com.example.currencyconverter.fragments
+package com.example.currencyconverter.presentation.search.ui.fragments
 
 import android.os.Bundle
 import android.text.Editable
@@ -7,26 +7,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.currencyconverter.SHARED_PREFS
-import com.example.currencyconverter.adapters.CurrencyAdapter
+import com.example.currencyconverter.creator.Creator
+import com.example.currencyconverter.presentation.search.ui.adapters.CurrencyAdapter
 import com.example.currencyconverter.databinding.FragmentSearchBinding
+import com.example.currencyconverter.domain.repositories.SearchRepository
+import com.example.currencyconverter.domain.repositories.StorageRepository
 import com.example.currencyconverter.models.CurrencyInfo
-import com.example.currencyconverter.models.SearchService
-import com.example.currencyconverter.viewmodels.SearchViewModel
-import com.google.gson.Gson
+import com.example.currencyconverter.presentation.search.view_model.SearchViewModel
+
 
 class SearchFragment : Fragment() {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: SearchViewModel by viewModels()
-    private val searchService = SearchService()
-    private lateinit var adapter: CurrencyAdapter
     private var isLeftClicked = true
+    private lateinit var viewModel: SearchViewModel
+    private lateinit var searchRepository: SearchRepository
+    private lateinit var storageRepository: StorageRepository
+    private lateinit var adapter: CurrencyAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +51,8 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        createViewModel()
+
         setRecyclerView()
 
         with(binding){
@@ -62,7 +67,7 @@ class SearchFragment : Fragment() {
                 }
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    val filteredList = filterList(s.toString())
+                    val filteredList = viewModel.getCurrencyFilteredList(s.toString())
                     adapter.updateDataSet(filteredList)
                 }
 
@@ -76,6 +81,14 @@ class SearchFragment : Fragment() {
         }
     }
 
+    private fun createViewModel() {
+        activity?.let {
+            searchRepository = Creator.provideSearchRepository(it.applicationContext)
+            storageRepository = Creator.provideStorageRepository(it.applicationContext)
+        }
+        viewModel = ViewModelProvider(this,SearchViewModel.getViewModelFactory(searchRepository,storageRepository))[SearchViewModel::class.java]
+    }
+
     private fun clearSearchInput() {
         binding.searchEditText.setText("")
     }
@@ -86,14 +99,14 @@ class SearchFragment : Fragment() {
     }
 
     private fun setRecyclerView() {
-        adapter = CurrencyAdapter(searchService.defaultListOfCurrencies, requireContext(), object: CurrencyAdapter.CurrencyActionListener{
+        adapter = CurrencyAdapter(viewModel.getCurrencyDefaultList(), requireContext(), object: CurrencyAdapter.CurrencyActionListener{
             override fun onClickCurrency(currencyInfo: CurrencyInfo) {
                 val action = SearchFragmentDirections.actionSearchFragmentToConverterFragment()
 
                 navigate(action)
 
-                if (isLeftClicked) putSharedPrefs(LEFT_CURRENCY, currencyInfo)
-                else putSharedPrefs(RIGHT_CURRENCY, currencyInfo)
+                if (isLeftClicked) viewModel.putCurrencyInStorage(LEFT_CURRENCY, currencyInfo)
+                else viewModel.putCurrencyInStorage(RIGHT_CURRENCY, currencyInfo)
 
             }
 
@@ -104,26 +117,6 @@ class SearchFragment : Fragment() {
             recyclerView.setHasFixedSize(true)
         }
     }
-
-    private fun putSharedPrefs(side: String, currencyInfo: CurrencyInfo){
-        val sharedPrefs = activity?.getSharedPreferences(SHARED_PREFS,0)
-        val jSonCurrency = Gson().toJson(currencyInfo, CurrencyInfo::class.java)
-        sharedPrefs?.let {
-            it.edit()
-                .putString(side, jSonCurrency)
-                .apply()
-        }
-    }
-
-    fun filterList(searchInput: String): MutableList<CurrencyInfo>{
-        val defaultListOfCurrencies = searchService.defaultListOfCurrencies
-        var tempList = mutableListOf<CurrencyInfo>()
-        tempList = defaultListOfCurrencies.filter {
-            it.code.contains(searchInput,true)||getString(it.name).contains(searchInput,true)
-        }.toMutableList()
-        return tempList
-    }
-
 
     private fun navigate(action: NavDirections){
         findNavController().navigate(action)

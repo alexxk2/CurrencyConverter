@@ -6,4 +6,5 @@ class GetExchangeRateUseCase(private val networkRepository: NetworkRepository) {
 
     suspend fun execute(baseCurrency: String, currencies: String): Float =
         networkRepository.getExchangeRate(baseCurrency = baseCurrency, currencies = currencies)
+
 }

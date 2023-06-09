@@ -1,4 +1,4 @@
-package com.example.currencyconverter.adapters
+package com.example.currencyconverter.presentation.search.ui.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.CurrencyItemBinding
 import com.example.currencyconverter.models.CurrencyInfo
-import com.example.currencyconverter.utils.CurrencyDiffCallback
 
 
 class CurrencyAdapter(
