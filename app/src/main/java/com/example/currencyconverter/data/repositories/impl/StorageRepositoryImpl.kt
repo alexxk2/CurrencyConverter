@@ -3,7 +3,7 @@ package com.example.currencyconverter.data.repositories.impl
 import com.example.currencyconverter.data.search.models.CurrencyInfoDto
 import com.example.currencyconverter.data.storage.SharedPrefStorage
 import com.example.currencyconverter.domain.repositories.StorageRepository
-import com.example.currencyconverter.models.CurrencyInfo
+import com.example.currencyconverter.domain.models.CurrencyInfo
 
 class StorageRepositoryImpl(private val sharedPrefStorage: SharedPrefStorage): StorageRepository {
 
@@ -34,7 +34,7 @@ class StorageRepositoryImpl(private val sharedPrefStorage: SharedPrefStorage): S
         )
     }
 
-    private fun mapToDomain(defaultValue: CurrencyInfoDto): CurrencyInfo{
+    private fun mapToDomain(defaultValue: CurrencyInfoDto): CurrencyInfo {
         return CurrencyInfo(
             code = defaultValue.code,
             name = defaultValue.name,

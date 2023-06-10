@@ -1,10 +1,9 @@
 package com.example.currencyconverter.data.storage.impl
 
 import android.content.Context
-import com.example.currencyconverter.SHARED_PREFS
+import com.example.currencyconverter.app.SHARED_PREFS
 import com.example.currencyconverter.data.search.models.CurrencyInfoDto
 import com.example.currencyconverter.data.storage.SharedPrefStorage
-import com.example.currencyconverter.models.CurrencyInfo
 import com.google.gson.Gson
 
 class SharedPrefStorageImpl(context: Context): SharedPrefStorage {

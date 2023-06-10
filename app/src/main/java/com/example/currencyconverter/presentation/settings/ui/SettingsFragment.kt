@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.currencyconverter.App
-import com.example.currencyconverter.IS_DARK_THEME
-import com.example.currencyconverter.LANGUAGE
-import com.example.currencyconverter.SHARED_PREFS
+import com.example.currencyconverter.app.App
+import com.example.currencyconverter.app.IS_DARK_THEME
+import com.example.currencyconverter.app.LANGUAGE
+import com.example.currencyconverter.app.SHARED_PREFS
 import com.example.currencyconverter.databinding.FragmentSettingsBinding
 import com.example.currencyconverter.presentation.settings.view_model.SettingsViewModel
 

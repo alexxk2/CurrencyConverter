@@ -1,16 +1,12 @@
 package com.example.currencyconverter.presentation.search.view_model
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.currencyconverter.domain.repositories.SearchRepository
 import com.example.currencyconverter.domain.repositories.StorageRepository
 import com.example.currencyconverter.domain.search.GetCurrencyDefaultListUseCase
 import com.example.currencyconverter.domain.search.GetCurrencyFilteredListUseCase
-import com.example.currencyconverter.domain.storage.GetCurrencyFromStorageUseCase
 import com.example.currencyconverter.domain.storage.PutCurrencyInStorageUseCase
-import com.example.currencyconverter.models.CurrencyInfo
+import com.example.currencyconverter.domain.models.CurrencyInfo
 
 class SearchViewModel(searchRepository: SearchRepository, storageRepository: StorageRepository): ViewModel() {
 
@@ -31,14 +27,4 @@ class SearchViewModel(searchRepository: SearchRepository, storageRepository: Sto
         putCurrencyInStorageUseCase.execute(side,currencyInfo)
     }
 
-    companion object{
-        fun getViewModelFactory(searchRepository: SearchRepository, storageRepository: StorageRepository): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(
-                    searchRepository = searchRepository,
-                    storageRepository = storageRepository
-                )
-            }
-        }
-    }
 }

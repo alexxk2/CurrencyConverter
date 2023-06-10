@@ -2,7 +2,7 @@ package com.example.currencyconverter.data.repositories.impl
 
 import com.example.currencyconverter.data.search.HardCodedCurrencyStorage
 import com.example.currencyconverter.domain.repositories.SearchRepository
-import com.example.currencyconverter.models.CurrencyInfo
+import com.example.currencyconverter.domain.models.CurrencyInfo
 
 class SearchRepositoryImpl(private val hardCodedCurrencyStorage: HardCodedCurrencyStorage) :
     SearchRepository {
