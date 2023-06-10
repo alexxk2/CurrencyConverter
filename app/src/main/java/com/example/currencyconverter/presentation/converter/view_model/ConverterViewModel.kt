@@ -2,10 +2,7 @@ package com.example.currencyconverter.presentation.converter.view_model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.currencyconverter.domain.converter.ConvertCurrencyUseCase
 import com.example.currencyconverter.domain.converter.DecimalLimitUseCase
 import com.example.currencyconverter.domain.network.GetExchangeRateUseCase
@@ -13,7 +10,7 @@ import com.example.currencyconverter.domain.repositories.NetworkRepository
 import com.example.currencyconverter.domain.repositories.StorageRepository
 import com.example.currencyconverter.domain.storage.GetCurrencyFromStorageUseCase
 import com.example.currencyconverter.domain.storage.PutCurrencyInStorageUseCase
-import com.example.currencyconverter.models.CurrencyInfo
+import com.example.currencyconverter.domain.models.CurrencyInfo
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
@@ -77,20 +74,8 @@ class ConverterViewModel(networkRepository: NetworkRepository, storageRepository
         putCurrencyInStorageUseCase.execute(side,currencyInfo)
     }
 
-    fun getCurrencyFromStorage(defaultValue: CurrencyInfo, sharedPrefsName: String): CurrencyInfo{
+    fun getCurrencyFromStorage(defaultValue: CurrencyInfo, sharedPrefsName: String): CurrencyInfo {
         return getCurrencyFromStorageUseCase.execute(defaultValue,sharedPrefsName)
-    }
-
-    companion object {
-        fun getViewModelFactory(networkRepository: NetworkRepository, storageRepository: StorageRepository): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    ConverterViewModel(
-                        networkRepository = networkRepository,
-                        storageRepository = storageRepository
-                    )
-                }
-            }
     }
 
 }

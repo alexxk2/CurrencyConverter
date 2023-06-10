@@ -14,17 +14,16 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.currencyconverter.R
-import com.example.currencyconverter.creator.Creator
 import com.example.currencyconverter.databinding.FragmentConverterBinding
 import com.example.currencyconverter.domain.repositories.StorageRepository
-import com.example.currencyconverter.models.CurrencyInfo
+import com.example.currencyconverter.domain.models.CurrencyInfo
 import com.example.currencyconverter.presentation.converter.view_model.ConverterApiStatus
 import com.example.currencyconverter.presentation.converter.view_model.ConverterViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
@@ -34,7 +33,7 @@ class ConverterFragment : Fragment() {
     private val handler = Handler(Looper.getMainLooper())
     private val convertRunnable = Runnable { convertWithGivenValue() }
     private lateinit var storageRepository: StorageRepository
-    private lateinit var viewModel: ConverterViewModel
+    private val viewModel: ConverterViewModel by viewModel()
     private lateinit var leftCurrency : CurrencyInfo
     private lateinit var rightCurrency : CurrencyInfo
 
@@ -57,7 +56,6 @@ class ConverterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        createViewModel()
         getCurrencyDataFromSharedPrefs()
         setFlags()
 
@@ -159,15 +157,6 @@ class ConverterFragment : Fragment() {
             )
         }
         manageHintMessage()
-    }
-
-    private fun createViewModel(){
-        val networkRepository = Creator.provideNetworkRepository()
-        activity?.let {
-            storageRepository = Creator.provideStorageRepository(it.applicationContext)
-        }
-        viewModel = ViewModelProvider(this,
-            ConverterViewModel.getViewModelFactory(networkRepository,storageRepository))[ConverterViewModel::class.java]
     }
 
     private fun changeClearButtonVisibility(input: Editable?) {

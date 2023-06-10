@@ -1,7 +1,7 @@
 package com.example.currencyconverter.domain.search
 
 import com.example.currencyconverter.domain.repositories.SearchRepository
-import com.example.currencyconverter.models.CurrencyInfo
+import com.example.currencyconverter.domain.models.CurrencyInfo
 
 class GetCurrencyFilteredListUseCase(private val searchRepository: SearchRepository) {
 

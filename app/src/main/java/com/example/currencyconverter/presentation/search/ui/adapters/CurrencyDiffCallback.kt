@@ -2,7 +2,7 @@ package com.example.currencyconverter.presentation.search.ui.adapters
 
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.currencyconverter.models.CurrencyInfo
+import com.example.currencyconverter.domain.models.CurrencyInfo
 
 class CurrencyDiffCallback(
     private val oldList: MutableList<CurrencyInfo>,

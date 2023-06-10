@@ -1,7 +1,7 @@
 package com.example.currencyconverter.domain.storage
 
 import com.example.currencyconverter.domain.repositories.StorageRepository
-import com.example.currencyconverter.models.CurrencyInfo
+import com.example.currencyconverter.domain.models.CurrencyInfo
 
 class PutCurrencyInStorageUseCase(private val storageRepository: StorageRepository) {
 

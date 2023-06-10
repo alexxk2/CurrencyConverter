@@ -7,17 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.currencyconverter.creator.Creator
 import com.example.currencyconverter.presentation.search.ui.adapters.CurrencyAdapter
 import com.example.currencyconverter.databinding.FragmentSearchBinding
-import com.example.currencyconverter.domain.repositories.SearchRepository
-import com.example.currencyconverter.domain.repositories.StorageRepository
-import com.example.currencyconverter.models.CurrencyInfo
+import com.example.currencyconverter.domain.models.CurrencyInfo
 import com.example.currencyconverter.presentation.search.view_model.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class SearchFragment : Fragment() {
@@ -25,9 +22,7 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private var isLeftClicked = true
-    private lateinit var viewModel: SearchViewModel
-    private lateinit var searchRepository: SearchRepository
-    private lateinit var storageRepository: StorageRepository
+    private val viewModel: SearchViewModel by viewModel()
     private lateinit var adapter: CurrencyAdapter
 
 
@@ -50,8 +45,6 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        createViewModel()
 
         setRecyclerView()
 
@@ -79,14 +72,6 @@ class SearchFragment : Fragment() {
             backButton.setOnClickListener { findNavController().navigateUp() }
             buttonClear.setOnClickListener { clearSearchInput() }
         }
-    }
-
-    private fun createViewModel() {
-        activity?.let {
-            searchRepository = Creator.provideSearchRepository(it.applicationContext)
-            storageRepository = Creator.provideStorageRepository(it.applicationContext)
-        }
-        viewModel = ViewModelProvider(this,SearchViewModel.getViewModelFactory(searchRepository,storageRepository))[SearchViewModel::class.java]
     }
 
     private fun clearSearchInput() {
