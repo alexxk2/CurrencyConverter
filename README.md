@@ -5,11 +5,15 @@
 
 ## Используемый стек
 
++ Clean Architecture
++ Koin
++ Retrofit2
++ SOLID
 + MVVM (ViewModel, LiveData)  
 + RecyclerView & DiffUtil  
 + ViewBinding  
 + Navigation Component  
-+ Retrofit2  
++ SharedPreferences
 + Debounce  
 + Glide
 
