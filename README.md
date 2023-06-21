@@ -17,6 +17,9 @@
 + Debounce  
 + Glide
 
+
+## Скриншоты основных экранов
+
 ![Main screen](https://github.com/alexxk2/CurrencyConverter/blob/dev/app/src/main/res/drawable/example_main_screen3.jpg)
 ![Search screen](https://github.com/alexxk2/CurrencyConverter/blob/dev/app/src/main/res/drawable/example_search_currency3.jpg)
 ![Settings screen](https://github.com/alexxk2/CurrencyConverter/blob/dev/app/src/main/res/drawable/example_settings_english3.jpg)
