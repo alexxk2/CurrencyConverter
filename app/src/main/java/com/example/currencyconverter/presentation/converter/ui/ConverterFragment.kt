@@ -1,12 +1,14 @@
 package com.example.currencyconverter.presentation.converter.ui
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent.ACTION_DOWN
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,7 +63,8 @@ class ConverterFragment : Fragment() {
         setFlags()
 
         with(viewModel){
-            makeRequest(leftCurrency.code, rightCurrency.code)
+            //временно отключил на разработку, чтобы не шли запросы вхолостую
+            //makeRequest(leftCurrency.code, rightCurrency.code)
 
             apiStatus.observe(viewLifecycleOwner){currentApiStatus ->
                 when(currentApiStatus){
@@ -107,9 +110,12 @@ class ConverterFragment : Fragment() {
 
 
         with(binding){
-            settingsButton.setOnClickListener {
-                val action = ConverterFragmentDirections.actionConverterFragmentToSettingsFragment()
-                navigate(action)
+
+            converterConstraintLayout.setOnTouchListener{view,event->
+                    if (event.action == ACTION_DOWN){
+                        hideKeyboard(view)
+                    }
+                false
             }
 
             leftCurrency.setOnClickListener {

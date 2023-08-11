@@ -42,9 +42,7 @@ class SettingsFragment : Fragment() {
         setLanguageChip()
 
         with(binding){
-            backButton.setOnClickListener {
-                findNavController().navigateUp()
-            }
+
             darkThemeSwitcher.setOnCheckedChangeListener { _, isChecked ->
                 (activity?.applicationContext as App).switchNightMode(isChecked)
             }

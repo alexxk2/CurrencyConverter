@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Currency Converter</string>
-
+    <string name="converter">Converter</string>
 
     <!--Converter screen-->
     <string name="change_currency">button to change currency</string>
@@ -55,6 +55,9 @@
     <string name="thb">Thai Baht</string>
     <string name="uzs">Uzbekistan Som</string>
     <string name="btc">Bitcoin</string>
+
+    <!--History screen-->
+    <string name="history">History</string>
 
 
 

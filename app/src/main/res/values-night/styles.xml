@@ -169,6 +169,7 @@
         <item name="android:textSize">@dimen/settings_title_size</item>
         <item name="android:textColor">@color/soft_white</item>
         <item name="android:layout_marginStart">@dimen/navigation_buttons_margin</item>
+        <item name="android:layout_marginTop">@dimen/navigation_buttons_margin</item>
     </style>
 
     <style name="SettingsTextItems">

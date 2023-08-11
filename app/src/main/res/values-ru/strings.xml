@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources >
     <string name="app_name">Конвертер валют</string>
-
+    <string name="converter">Converter</string>
 
     <!--Converter screen-->
     <string name="change_currency">кнопка для смены валюты</string>
@@ -56,5 +56,9 @@
     <string name="thb">Тайский бат</string>
     <string name="uzs">Узбекский сум</string>
     <string name="btc">Биткоин</string>
+
+    <!--History screen-->
+    <string name="history">История</string>
+
 
 </resources>

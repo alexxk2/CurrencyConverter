@@ -11,9 +11,6 @@
         android:label="fragment_converter"
         tools:layout="@layout/fragment_converter" >
         <action
-            android:id="@+id/action_converterFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
-        <action
             android:id="@+id/action_converterFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
     </fragment>
@@ -34,4 +31,9 @@
             android:id="@+id/action_searchFragment_to_converterFragment"
             app:destination="@id/converterFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/historyFragment"
+        android:name="com.example.currencyconverter.presentation.history.HistoryFragment"
+        android:label="fragment_history"
+        tools:layout="@layout/fragment_history" />
 </navigation>

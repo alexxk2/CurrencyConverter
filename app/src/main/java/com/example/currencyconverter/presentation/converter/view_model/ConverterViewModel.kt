@@ -30,7 +30,8 @@ class ConverterViewModel(
     private val _conversionCounter  = MutableLiveData(1)
     val conversionCounter: MutableLiveData<Int> = _conversionCounter
 
-    private val _apiStatus = MutableLiveData<ConverterApiStatus>()
+    //убрать DONE по умолчанию после разработки
+    private val _apiStatus = MutableLiveData<ConverterApiStatus>(ConverterApiStatus.DONE)
     val apiStatus: MutableLiveData<ConverterApiStatus> = _apiStatus
 
     private var exchangeRate = 1.0f
