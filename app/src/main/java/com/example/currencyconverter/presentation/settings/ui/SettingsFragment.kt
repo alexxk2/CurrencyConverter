@@ -41,19 +41,22 @@ class SettingsFragment : Fragment() {
         setDarkThemeSwitcher()
         setLanguageChip()
 
-        binding.backButton.setOnClickListener {
-            findNavController().navigateUp()
-        }
-        binding.darkThemeSwitcher.setOnCheckedChangeListener { _, isChecked ->
-            (activity?.applicationContext as App).switchNightMode(isChecked)
+        with(binding){
+            backButton.setOnClickListener {
+                findNavController().navigateUp()
+            }
+            darkThemeSwitcher.setOnCheckedChangeListener { _, isChecked ->
+                (activity?.applicationContext as App).switchNightMode(isChecked)
+            }
+
+            chipEnglish.setOnClickListener {
+                (activity?.applicationContext as App).switchLanguage("en")
+            }
+            chipRussian.setOnClickListener {
+                (activity?.applicationContext as App).switchLanguage("ru")
+            }
         }
 
-        binding.chipEnglish.setOnClickListener {
-            (activity?.applicationContext as App).switchLanguage("en")
-        }
-        binding.chipRussian.setOnClickListener {
-            (activity?.applicationContext as App).switchLanguage("ru")
-        }
     }
 
     private fun setDarkThemeSwitcher(){

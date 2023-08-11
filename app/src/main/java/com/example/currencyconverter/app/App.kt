@@ -75,7 +75,6 @@ class App : Application() {
         val appLocale2 = LocaleListCompat.create(locale)
         // Call this on the main thread as it may require Activity.restart()
         AppCompatDelegate.setApplicationLocales(appLocale2)
-
     }
 
 }

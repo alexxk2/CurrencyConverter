@@ -19,16 +19,14 @@ class NetworkClientImpl: NetworkClient {
         retrofit.create(ConverterApiService::class.java)
     }
 
-
     override suspend fun getAllCurrenciesRates(dto: Any): Response{
 
-        if(dto is CurrencyRequestEntity){
+        return if(dto is CurrencyRequestEntity){
             val result = retrofitService.getLatest(baseCurrency = dto.baseCurrency)
             val body = result.body()?:Response()
 
-            return body.apply { resultCode = result.code() }
-        }
-        else return Response().apply { resultCode = 400 }
+            body.apply { resultCode = result.code() }
+        } else Response().apply { resultCode = 400 }
 
     }
 

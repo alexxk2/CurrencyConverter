@@ -13,7 +13,6 @@ interface ConverterApiService {
     suspend fun getLatest(
         @Query("apikey") apiKey: String = API_KEY,
         @Query("base_currency") baseCurrency: String,
-        //@Query("currencies") currencies: String
     ): Response<CurrencyResponseEntity>
 
     @GET("/v3/currencies")

@@ -1,5 +1,6 @@
 package com.example.currencyconverter.presentation.converter.ui
 
+
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -13,6 +14,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
@@ -32,7 +34,6 @@ class ConverterFragment : Fragment() {
     private val binding get() = _binding!!
     private val handler = Handler(Looper.getMainLooper())
     private val convertRunnable = Runnable { convertWithGivenValue() }
-    private lateinit var storageRepository: StorageRepository
     private val viewModel: ConverterViewModel by viewModel()
     private lateinit var leftCurrency : CurrencyInfo
     private lateinit var rightCurrency : CurrencyInfo
@@ -141,7 +142,6 @@ class ConverterFragment : Fragment() {
                         convertDebounced()
                         true
                     }
-
                     else -> false
                 }
             }
