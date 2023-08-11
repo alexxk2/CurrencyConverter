@@ -27,5 +27,5 @@ val dataModule = module {
     single<HardCodedCurrencyStorage> { HardCodedCurrencyStorageImpl(context = get()) }
 
     single<SearchRepository> { SearchRepositoryImpl(hardCodedCurrencyStorage = get())}
-
+    
 }

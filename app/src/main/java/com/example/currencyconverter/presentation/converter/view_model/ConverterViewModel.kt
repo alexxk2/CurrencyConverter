@@ -16,7 +16,13 @@ import java.lang.Exception
 
 enum class ConverterApiStatus{LOADING, DONE, ERROR}
 
-class ConverterViewModel(networkRepository: NetworkRepository, storageRepository: StorageRepository) : ViewModel() {
+class ConverterViewModel(
+    private val getExchangeRateUseCase: GetExchangeRateUseCase,
+    private val convertCurrencyUseCase: ConvertCurrencyUseCase,
+    private val decimalLimitUseCase: DecimalLimitUseCase,
+    private val getCurrencyFromStorageUseCase: GetCurrencyFromStorageUseCase,
+    private val putCurrencyInStorageUseCase: PutCurrencyInStorageUseCase
+) : ViewModel() {
 
     private val _convertedValue = MutableLiveData<String>()
     val convertedValue: MutableLiveData<String> = _convertedValue
@@ -29,11 +35,6 @@ class ConverterViewModel(networkRepository: NetworkRepository, storageRepository
 
     private var exchangeRate = 1.0f
 
-    private val getExchangeRateUseCase = GetExchangeRateUseCase(networkRepository)
-    private val convertCurrencyUseCase = ConvertCurrencyUseCase()
-    private val decimalLimitUseCase = DecimalLimitUseCase()
-    private val getCurrencyFromStorageUseCase = GetCurrencyFromStorageUseCase(storageRepository)
-    private val putCurrencyInStorageUseCase = PutCurrencyInStorageUseCase(storageRepository)
 
     fun convert(input: Double) {
         _convertedValue.value = convertCurrencyUseCase.execute(input.toBigDecimal(), exchangeRate)

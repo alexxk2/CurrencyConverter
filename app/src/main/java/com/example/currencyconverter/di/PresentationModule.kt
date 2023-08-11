@@ -9,7 +9,13 @@ import org.koin.dsl.module
 val presentationModule = module {
 
     viewModel<ConverterViewModel> {
-        ConverterViewModel(networkRepository = get(), storageRepository = get())
+        ConverterViewModel(
+            getExchangeRateUseCase = get(),
+            convertCurrencyUseCase = get(),
+            decimalLimitUseCase = get(),
+            getCurrencyFromStorageUseCase = get(),
+            putCurrencyInStorageUseCase = get()
+        )
     }
 
     viewModel<SearchViewModel> {
