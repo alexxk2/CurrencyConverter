@@ -18,6 +18,10 @@
 + Glide
 
 
+## Gif flow приложения
+
+<img src="https://github.com/alexxk2/CurrencyConverter/blob/master/app/src/main/res/drawable/flow.gif" width="340" height="699" />  <br>
+
 ## Скриншоты основных экранов
 
 ![Main screen](https://github.com/alexxk2/CurrencyConverter/blob/dev/app/src/main/res/drawable/example_main_screen3.jpg)
