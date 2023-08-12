@@ -1,5 +1,9 @@
 package com.example.currencyconverter.di
 
+import androidx.room.RoomDatabase
+import com.example.currencyconverter.data.db.HistoryDatabase
+import com.example.currencyconverter.data.db.RoomStorage
+import com.example.currencyconverter.data.db.impl.RoomStorageImpl
 import com.example.currencyconverter.data.network.NetworkClient
 import com.example.currencyconverter.data.network.impl.NetworkClientImpl
 import com.example.currencyconverter.data.repositories.impl.NetworkRepositoryImpl
@@ -18,7 +22,7 @@ val dataModule = module {
 
     single<SharedPrefStorage> { SharedPrefStorageImpl(context = get()) }
 
-    single<StorageRepository> { StorageRepositoryImpl(sharedPrefStorage = get()) }
+    single<StorageRepository> { StorageRepositoryImpl(sharedPrefStorage = get(), roomStorage = get()) }
 
     single<NetworkClient> { NetworkClientImpl() }
 
@@ -26,6 +30,9 @@ val dataModule = module {
 
     single<HardCodedCurrencyStorage> { HardCodedCurrencyStorageImpl(context = get()) }
 
-    single<SearchRepository> { SearchRepositoryImpl(hardCodedCurrencyStorage = get())}
-    
+    single<SearchRepository> { SearchRepositoryImpl(hardCodedCurrencyStorage = get()) }
+
+    single<HistoryDatabase> { HistoryDatabase.getDataBase(get()) }
+
+    single<RoomStorage> {RoomStorageImpl(historyDatabase = get())  }
 }

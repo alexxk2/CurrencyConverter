@@ -1,6 +1,7 @@
 package com.example.currencyconverter.di
 
 import com.example.currencyconverter.presentation.converter.view_model.ConverterViewModel
+import com.example.currencyconverter.presentation.history.view_model.HistoryViewModel
 import com.example.currencyconverter.presentation.search.view_model.SearchViewModel
 import com.example.currencyconverter.presentation.settings.view_model.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -14,7 +15,8 @@ val presentationModule = module {
             convertCurrencyUseCase = get(),
             decimalLimitUseCase = get(),
             getCurrencyFromStorageUseCase = get(),
-            putCurrencyInStorageUseCase = get()
+            putCurrencyInStorageUseCase = get(),
+            addNewHistoryItemUseCase = get()
         )
     }
 
@@ -24,5 +26,12 @@ val presentationModule = module {
 
     viewModel<SettingsViewModel> {
         SettingsViewModel()
+    }
+
+    viewModel<HistoryViewModel> {
+        HistoryViewModel(
+            getAllHistoryUseCase = get(),
+            clearHistoryUseCase = get()
+        )
     }
 }

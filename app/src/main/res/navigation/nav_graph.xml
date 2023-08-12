@@ -33,7 +33,7 @@
     </fragment>
     <fragment
         android:id="@+id/historyFragment"
-        android:name="com.example.currencyconverter.presentation.history.HistoryFragment"
+        android:name="com.example.currencyconverter.presentation.history.ui.HistoryFragment"
         android:label="fragment_history"
         tools:layout="@layout/fragment_history" />
 </navigation>

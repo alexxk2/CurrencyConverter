@@ -61,5 +61,8 @@
 
     <!--History screen-->
     <string name="history">History</string>
+    <string name="arrow">arrow</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="no_any_conversion_yet">You haven`t done any conversion yet</string>
 
 </resources>

@@ -11,23 +11,26 @@ import com.example.currencyconverter.domain.repositories.StorageRepository
 import com.example.currencyconverter.domain.storage.GetCurrencyFromStorageUseCase
 import com.example.currencyconverter.domain.storage.PutCurrencyInStorageUseCase
 import com.example.currencyconverter.domain.models.CurrencyInfo
+import com.example.currencyconverter.domain.models.HistoryInfo
+import com.example.currencyconverter.domain.storage.AddNewHistoryItemUseCase
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-enum class ConverterApiStatus{LOADING, DONE, ERROR}
+enum class ConverterApiStatus { LOADING, DONE, ERROR }
 
 class ConverterViewModel(
     private val getExchangeRateUseCase: GetExchangeRateUseCase,
     private val convertCurrencyUseCase: ConvertCurrencyUseCase,
     private val decimalLimitUseCase: DecimalLimitUseCase,
     private val getCurrencyFromStorageUseCase: GetCurrencyFromStorageUseCase,
-    private val putCurrencyInStorageUseCase: PutCurrencyInStorageUseCase
+    private val putCurrencyInStorageUseCase: PutCurrencyInStorageUseCase,
+    private val addNewHistoryItemUseCase: AddNewHistoryItemUseCase
 ) : ViewModel() {
 
     private val _convertedValue = MutableLiveData<String>()
     val convertedValue: MutableLiveData<String> = _convertedValue
 
-    private val _conversionCounter  = MutableLiveData(1)
+    private val _conversionCounter = MutableLiveData(1)
     val conversionCounter: MutableLiveData<Int> = _conversionCounter
 
     //убрать DONE по умолчанию после разработки
@@ -50,8 +53,8 @@ class ConverterViewModel(
         _conversionCounter.value = 0
     }
 
-    fun limitDecimal(beforeLimiting: String, maxDecimal: Int): String{
-        return decimalLimitUseCase.execute(beforeLimiting,maxDecimal)
+    fun limitDecimal(beforeLimiting: String, maxDecimal: Int): String {
+        return decimalLimitUseCase.execute(beforeLimiting, maxDecimal)
     }
 
     fun makeRequest(baseCurrency: String, currencies: String) {
@@ -72,12 +75,17 @@ class ConverterViewModel(
         }
     }
 
-    fun putCurrencyInStorage(side: String, currencyInfo: CurrencyInfo){
-        putCurrencyInStorageUseCase.execute(side,currencyInfo)
+    fun putCurrencyInStorage(side: String, currencyInfo: CurrencyInfo) {
+        putCurrencyInStorageUseCase.execute(side, currencyInfo)
     }
 
     fun getCurrencyFromStorage(defaultValue: CurrencyInfo, sharedPrefsName: String): CurrencyInfo {
-        return getCurrencyFromStorageUseCase.execute(defaultValue,sharedPrefsName)
+        return getCurrencyFromStorageUseCase.execute(defaultValue, sharedPrefsName)
     }
 
+    fun addNewHistoryItem(historyInfo: HistoryInfo) {
+        viewModelScope.launch {
+            addNewHistoryItemUseCase.execute(historyInfo)
+        }
+    }
 }

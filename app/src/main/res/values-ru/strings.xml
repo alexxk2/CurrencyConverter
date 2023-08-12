@@ -59,6 +59,9 @@
 
     <!--History screen-->
     <string name="history">История</string>
+    <string name="arrow">Стрелка</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="no_any_conversion_yet">Вы еще не сделали ни одной конвертации</string>
 
 
 </resources>

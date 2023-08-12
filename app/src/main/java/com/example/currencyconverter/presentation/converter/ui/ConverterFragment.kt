@@ -1,7 +1,6 @@
 package com.example.currencyconverter.presentation.converter.ui
 
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -16,20 +15,20 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.currencyconverter.R
 import com.example.currencyconverter.databinding.FragmentConverterBinding
-import com.example.currencyconverter.domain.repositories.StorageRepository
 import com.example.currencyconverter.domain.models.CurrencyInfo
+import com.example.currencyconverter.domain.models.HistoryInfo
 import com.example.currencyconverter.presentation.converter.view_model.ConverterApiStatus
 import com.example.currencyconverter.presentation.converter.view_model.ConverterViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.time.LocalDate
 
 class ConverterFragment : Fragment() {
     private var _binding: FragmentConverterBinding? = null
@@ -37,8 +36,8 @@ class ConverterFragment : Fragment() {
     private val handler = Handler(Looper.getMainLooper())
     private val convertRunnable = Runnable { convertWithGivenValue() }
     private val viewModel: ConverterViewModel by viewModel()
-    private lateinit var leftCurrency : CurrencyInfo
-    private lateinit var rightCurrency : CurrencyInfo
+    private lateinit var leftCurrency: CurrencyInfo
+    private lateinit var rightCurrency: CurrencyInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,22 +61,24 @@ class ConverterFragment : Fragment() {
         getCurrencyDataFromSharedPrefs()
         setFlags()
 
-        with(viewModel){
+        with(viewModel) {
             //временно отключил на разработку, чтобы не шли запросы вхолостую
             //makeRequest(leftCurrency.code, rightCurrency.code)
 
-            apiStatus.observe(viewLifecycleOwner){currentApiStatus ->
-                when(currentApiStatus){
-                    ConverterApiStatus.LOADING->{
+            apiStatus.observe(viewLifecycleOwner) { currentApiStatus ->
+                when (currentApiStatus) {
+                    ConverterApiStatus.LOADING -> {
                         hideErrorViews()
                         hideInputViews()
                         showLoadingViews()
                     }
+
                     ConverterApiStatus.DONE -> {
                         hideLoadingViews()
                         hideErrorViews()
                         showInputViews()
                     }
+
                     ConverterApiStatus.ERROR -> {
                         hideLoadingViews()
                         hideInputViews()
@@ -98,6 +99,15 @@ class ConverterFragment : Fragment() {
                     formatCurrencyDisplay(newConvertedValue),
                     rightCurrency.symbol
                 )
+
+                val newHistoryItem = HistoryInfo(
+                    startFlagSrc = leftCurrency.flag,
+                    endFlagSrc = rightCurrency.flag,
+                    inputValue = binding.startEditText.text.toString(),
+                    resultValue = newConvertedValue,
+                    date = LocalDate.now().toString()
+                )
+                viewModel.addNewHistoryItem(newHistoryItem)
             }
 
             conversionCounter.observe(viewLifecycleOwner) { conversionCounter ->
@@ -109,12 +119,12 @@ class ConverterFragment : Fragment() {
         }
 
 
-        with(binding){
+        with(binding) {
 
-            converterConstraintLayout.setOnTouchListener{view,event->
-                    if (event.action == ACTION_DOWN){
-                        hideKeyboard(view)
-                    }
+            converterConstraintLayout.setOnTouchListener { view, event ->
+                if (event.action == ACTION_DOWN) {
+                    hideKeyboard(view)
+                }
                 false
             }
 
@@ -148,6 +158,7 @@ class ConverterFragment : Fragment() {
                         convertDebounced()
                         true
                     }
+
                     else -> false
                 }
             }
@@ -169,6 +180,7 @@ class ConverterFragment : Fragment() {
         binding.buttonClear.visibility = if (input.isNullOrEmpty()) View.GONE
         else View.VISIBLE
     }
+
     private fun clearSearchInput() {
         binding.startEditText.setText("")
         clearResults()
@@ -194,7 +206,7 @@ class ConverterFragment : Fragment() {
         })
     }
 
-    private fun convertWithGivenValue(){
+    private fun convertWithGivenValue() {
         hideConvertProgressBar()
         val inputValue = binding.startEditText.text.toString()
         viewModel.convert(inputValue.toDouble())
@@ -202,11 +214,10 @@ class ConverterFragment : Fragment() {
 
     private fun convertDebounced() {
         val inputValue = binding.startEditText.text.toString()
-        if (inputValue.isEmpty()){
+        if (inputValue.isEmpty()) {
             Toast.makeText(context, R.string.no_input_error, Toast.LENGTH_SHORT).show()
             clearResults()
-        }
-        else{
+        } else {
             showConvertProgressBar()
             handler.removeCallbacks(convertRunnable)
             handler.postDelayed(convertRunnable, CONVERT_DELAY)
@@ -214,23 +225,23 @@ class ConverterFragment : Fragment() {
         hideKeyboard(binding.startEditText)
     }
 
-    private fun showConvertProgressBar(){
+    private fun showConvertProgressBar() {
         clearResults()
         binding.convertProgressBar.visibility = View.VISIBLE
     }
 
-    private fun hideConvertProgressBar(){
+    private fun hideConvertProgressBar() {
         binding.convertProgressBar.visibility = View.INVISIBLE
     }
 
-    private fun clearResults(){
-        with(binding){
+    private fun clearResults() {
+        with(binding) {
             resultTextView.text = ""
             baseCurrencyTextView.text = ""
         }
     }
 
-    private fun formatCurrencyDisplay(input: String): String{
+    private fun formatCurrencyDisplay(input: String): String {
         return if (input.isEmpty()) getString(R.string.last_input)
         else {
             val decimalFormat = DecimalFormat("###,###,##0.00")
@@ -245,19 +256,19 @@ class ConverterFragment : Fragment() {
         findNavController().navigate(action)
     }
 
-    private fun getCurrencyDataFromSharedPrefs(){
+    private fun getCurrencyDataFromSharedPrefs() {
         leftCurrency = viewModel.getCurrencyFromStorage(CurrencyInfo.DEFAULT_LEFT, LEFT_CURRENCY)
         rightCurrency = viewModel.getCurrencyFromStorage(CurrencyInfo.DEFAULT_RIGHT, RIGHT_CURRENCY)
     }
 
-    private fun swapFlags(){
-        viewModel.putCurrencyInStorage(LEFT_CURRENCY,rightCurrency)
-        viewModel.putCurrencyInStorage(RIGHT_CURRENCY,leftCurrency)
+    private fun swapFlags() {
+        viewModel.putCurrencyInStorage(LEFT_CURRENCY, rightCurrency)
+        viewModel.putCurrencyInStorage(RIGHT_CURRENCY, leftCurrency)
         getCurrencyDataFromSharedPrefs()
     }
 
 
-    private fun setFlags(){
+    private fun setFlags() {
         Glide.with(requireContext())
             .load(leftCurrency.flag)
             .into(binding.leftCurrencyImage)
@@ -273,15 +284,17 @@ class ConverterFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 val str = this@addDecimalLimiter.text!!.toString()
                 if (str.isEmpty()) return
-                val str2 = viewModel.limitDecimal(str,maxLimit)
+                val str2 = viewModel.limitDecimal(str, maxLimit)
                 if (str2 != str) {
                     this@addDecimalLimiter.setText(str2)
                     val pos = this@addDecimalLimiter.text!!.length
                     this@addDecimalLimiter.setSelection(pos)
                 }
             }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             }
         })
@@ -293,8 +306,8 @@ class ConverterFragment : Fragment() {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    private fun showInputViews(){
-        with(binding){
+    private fun showInputViews() {
+        with(binding) {
             startInputLayout.visibility = View.VISIBLE
             startEditText.visibility = View.VISIBLE
             convertButton.visibility = View.VISIBLE
@@ -307,8 +320,8 @@ class ConverterFragment : Fragment() {
         }
     }
 
-    private fun hideInputViews(){
-        with(binding){
+    private fun hideInputViews() {
+        with(binding) {
             startInputLayout.visibility = View.INVISIBLE
             startEditText.visibility = View.INVISIBLE
             convertButton.visibility = View.INVISIBLE
